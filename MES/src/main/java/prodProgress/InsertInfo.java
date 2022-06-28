@@ -171,21 +171,21 @@ public class InsertInfo extends HttpServlet {
     		  }
     	  }
     	  
-    	  dto.setNumber_of_request(noreq);
+    	  dto.setNumber_of_request(Integer.parseInt(request.getParameter("noreq")));
     	  dto.setPorder_company(request.getParameter("porder_c"));
     	  dto.setExp_date(request.getParameter("exp_d"));
     	  
     	  int u_price = 0;
     	  if(request.getParameter("u_price") != null) {
     		  try {
-    			  noreq = Integer.parseInt(request.getParameter("u_price"));
+    			  noreq = Integer.parseInt(request.getParameter("noreq"));
     		  }catch(NumberFormatException e) {
     			  result.put("result", 0);
     			  break;
     		  }
     	  }
     	  
-    	  dto.setNumber_of_request(u_price);
+    	  dto.setNumber_of_request(noreq);
     	  
     	  result.put("result",dao.writeOrderRequest(dto));
     	  

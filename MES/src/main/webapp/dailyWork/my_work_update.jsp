@@ -57,6 +57,10 @@ if(request.getParameter("work_start").equals("")){
 }else{
 	work_start = "'"+request.getParameter("work_start").replace("T"," ")+":00'";
 	status="진행";
+	if(work_start.length()>=23){
+		work_start = work_start.substring(0,work_start.length()-4);
+		work_start += "'";
+	}
 }
 if(request.getParameter("work_end").equals("")){
 	work_end = "null";
@@ -64,7 +68,10 @@ if(request.getParameter("work_end").equals("")){
 }else{
 	work_end = "'"+request.getParameter("work_end").replace("T"," ")+":00'";
 	status="완료";
-	
+	if(work_end.length()>=23){
+		work_end = work_end.substring(0,work_end.length()-4);
+		work_end += "'";
+	}
 	SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
 	Date d1 = f.parse(work_start.replace("'",""));
 	
@@ -129,7 +136,7 @@ query = "update my_work set work_start="+work_start+", work_end="+work_end+", fa
 
 
 stmt.executeUpdate(query);
-response.sendRedirect("my_work.jsp");
+response.sendRedirect("dailyWork.jsp");
 	
 	
 

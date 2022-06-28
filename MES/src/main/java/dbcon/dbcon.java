@@ -888,12 +888,13 @@ public class dbcon {
 		return v;
 	}
 	
-	public void insertplace_order(String[] partname, String[] type, String[] nor, String com, String place, String[] price, String note){		
+	public void insertplace_order(String[] partname, String[] type, String[] nor, String com, String place, String[] price, String note, String [] n_mo, String [] order_name){		
 		try {
 			dbconnect();
 			String sql = "insert into place_order(part_name, type, "
-					+ "number_of_request, porder_company, p_date, receiving_day, receiving_status, place_of_delivery, unit_price, note) values"
-					+ "(?, ?, ?, ?, sysdate(), null, 'N', ?, ?, ?)";
+					+ "number_of_request, porder_company, p_date, receiving_day, receiving_status, place_of_delivery, unit_price, note, order_name) values"
+					+ "(?, ?, ?, ?, sysdate(), null, 'N', ?, ?, ?, ?)";
+			String delsql = "delete from manage_porder where m_no = ?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			for(int i=0; i<partname.length; i++) {
 				pstmt.setString(1, partname[i]);
@@ -903,6 +904,17 @@ public class dbcon {
 				pstmt.setString(5, place);
 				pstmt.setInt(6, Integer.parseInt(price[i]));
 				pstmt.setString(7, note);
+				if(order_name[i] != null) {
+					pstmt.setString(8, order_name[i]);
+				}
+				else {
+					pstmt.setString(8, "");	
+				}
+				pstmt.executeUpdate();
+			}
+			pstmt = con.prepareStatement(delsql);
+			for(int i=0; i<n_mo.length; i++) {
+				pstmt.setString(1, n_mo[i]);
 				pstmt.executeUpdate();
 			}
 			pstmt.close();

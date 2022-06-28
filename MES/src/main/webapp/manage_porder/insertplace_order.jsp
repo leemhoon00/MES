@@ -7,14 +7,19 @@
 	dbcon dbc = new dbcon();
 	
 	String[] partname = request.getParameterValues("npart_name");
+	for(int i=0; i<partname.length; i++){
+		System.out.println(partname[i]);
+	}
 	String[] nor = request.getParameterValues("nnor");
 	String[] price = request.getParameterValues("nprice");
 	String[] type = request.getParameterValues("ntype");
 	String ordercom = request.getParameter("nordercom");
 	String place = request.getParameter("nplace");
 	String note = request.getParameter("nnote");
+	String[] n_mo = request.getParameterValues("nm_no");
+	String[] ordername = request.getParameterValues("norder_name");
 	
-	dbc.insertplace_order(partname, type, nor, ordercom, place, price, note);
+	dbc.insertplace_order(partname, type, nor, ordercom, place, price, note, n_mo, ordername);
 	PrintWriter script = response.getWriter();
 	script.println("<script>");
 	script.println("alert('성공');");

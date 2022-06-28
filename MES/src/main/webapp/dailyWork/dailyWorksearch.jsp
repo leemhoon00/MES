@@ -102,7 +102,7 @@
 	%>
 </table>
 <script>
-//테이블 열 클릭 이벤트
+//테이블 행 클릭 이벤트
 $(".dwtablecontent").on("click",function(){
 	if($(this).children("#dwtype").text() == "사내"){
 		$("#mwform").each(function(){this.reset();});
@@ -126,7 +126,7 @@ $(".dwtablecontent").on("click",function(){
 		}
 		
 		status($(this).children("#dwsta").text());
-		
+		$("#worklogmodal #work_id").val($(this).children("#dwwid").text());
 		$.ajax({
 			data: "GET",
 			asycn: false,
@@ -152,6 +152,7 @@ $(".dwtablecontent").on("click",function(){
 	else if($(this).children("#dwtype").text() == "외주"){
 		$("#osform").each(function(){this.reset();});
 		
+		$("#outsoumodal #outsourcing_no").val($(this).children("#dwwid").text());
 		$("#outsoumodal #ordername").val($(this).children("#dworder").text());
 		$("#outsoumodal #partname").val($(this).children("#dwpart").text());
 		$("#outsoumodal #processname").val($(this).children("#dwproc").text());

@@ -180,7 +180,7 @@ List<OrderPartDetailDTO> orderpartdetaillist = dao.getOrderPartDetail(itemno);
 	     	for(JSONObject processwork: dto.getProcess()){
 	     %>
 	        <td style="padding:0px;">
-	            <div style="width: 170px; height: 25px; margin: 3px; margin-bottom: 3px;" class="<%=processwork.get("workstatus") %>">
+	            <div style="width: 170px; height: 25px; margin: 3px; margin-bottom: 3px;" class="<%=processwork.get("workstatus")%><%=processwork.get("proctype").equals("외주")?" outsourc":""%>">
 	                <%= processwork.get("process") %>
 	            </div>
 	            <div style="width: 95%; text-align: center; margin: 8px; margin-top: 0px;">

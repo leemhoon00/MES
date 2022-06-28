@@ -71,6 +71,8 @@
                 </div>
                 <div class="modal-body">
                     <h5 style="font-size: 16px;">작업일보 조회</h5><hr>
+                    <form id="my_work_form">
+                    <input type="text" id="work_id" name="work_id" style="display:none">
                     <table class="table" id="worklogtable">
                         <thead class="tablehead" style="background: rgb(83, 83, 83);">
                             <th style="width: 12.5%; text-align: center;">수주명</th>
@@ -90,9 +92,9 @@
 			                                <td><input type="text" class="form-control" id="partname" readonly></td>
 			                                <td><input type="text" class="form-control" id="processname" readonly></td>
 			                                <td><input type="text" class="form-control" id="facilityname" readonly></td>
-			                                <td><input type="datetime-local" class="form-control" id="startdtime"></td>
-			                                <td><input type="datetime-local" class="form-control" id="enddtime"></td>
-			                                <td style="text-align: center;"><input type="checkbox" id="faultycheck"></td>
+			                                <td><input type="datetime-local" class="form-control" id="startdtime" name="work_start"></td>
+			                                <td><input type="datetime-local" class="form-control" id="enddtime" name="work_end"></td>
+			                                <td style="text-align: center;"><input type="checkbox" id="faultycheck" name="faulty"></td>
 			                                <td><div id="statusdiv" style="text-align:center;"></div></td>
 		                            </div>
 		                        </form>
@@ -122,9 +124,9 @@
 			                                <td><input type="text" class="form-control" id="amount" readonly></td>
 			                                <td><input type="text" class="form-control" id="coretype" readonly></td>
 			                                <td><input type="text" class="form-control" id="worktime" readonly></td>
-			                                <td><input type="text" class="form-control" id="aworktime" readonly></td>
-			                                <td><input type="text" class="form-control" id="npworktime" readonly></td>
-			                                <td><input type="text" class="form-control" id="nworktime" readonly></td>
+			                                <td><input type="text" class="form-control" id="aworktime" name="real_processing_time"></td>
+			                                <td><input type="text" class="form-control" id="npworktime" name="no_men_processing_time"></td>
+			                                <td><input type="text" class="form-control" id="nworktime" name="un_processing_time"></td>
 			                                <td><input type="text" class="form-control" id="totalwt" readonly></td>
 			                                <td><input type="text" class="form-control" id="totalmt" readonly></td>
 		                            </div>
@@ -132,8 +134,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    </form>
                 </div>
                 <div class="modal-footer">
+                	<button type="submit" form="my_work_form" formaction="my_work_update.jsp" formmethod="post" class="btn btn-primary float-right">수정</button>
+                	<button type="submit" form="my_work_form" formaction="my_work_delete.jsp" formmethod="post" class="btn btn-danger float-right">삭제</button>
                     <button type="button" class="btn btn-default float-right" data-dismiss="modal">닫기</button>
                 </div>
             </div>
@@ -150,7 +155,7 @@
                 <h4 class="modal-title" id="myModalLabel">작업실적등록</h4>
                 </div>
                 <div class="modal-body">
-                    <h5 style="font-size: 16px;">외부작업일보 조회</h5><hr>
+                    <h5 style="font-size: 16px;">외주작업일보 조회</h5><hr>
                     <table class="table" id="outsoutable">
                         <thead class="tablehead" style="background: rgb(83, 83, 83);">
                             <th style="width: 11.1%; text-align: center;">수주명</th>
@@ -167,15 +172,16 @@
                         	<tr>
 	                            <div class="form-group">
 		                            <form id="osform">
-		                                <td><input type="text" class="form-control" id="ordername" readonly></td>
-		                                <td><input type="text" class="form-control" id="partname" readonly></td>
-		                                <td><input type="text" class="form-control" id="processname" readonly></td>
-		                                <td><input type="text" class="form-control" id="companyname" readonly></td>
-		                                <td><input type="text" class="form-control" id="price"></td>
-		                                <td><input type="text" class="form-control" id="whdate" maxlength="10"></td>
-		                                <td><input type="date" class="form-control" id="outsstarttime"></td>
-		                                <td><input type="date" class="form-control" id="outsendtime"></td>
-		                                <td style="text-align: center;"><input type="checkbox" id="faultycheck"></td>
+		                            	<td style="display:none"><input type="text" class="form-control" id="outsourcing_no" name="outsourcing_no"></td>
+		                                <td><input type="text" class="form-control" id="ordername" readonly name="ordername"></td>
+		                                <td><input type="text" class="form-control" id="partname" readonly name="partname"></td>
+		                                <td><input type="text" class="form-control" id="processname" readonly name="processname"></td>
+		                                <td><input type="text" class="form-control" id="companyname" readonly name="companyname"></td>
+		                                <td><input type="text" class="form-control" id="price" name="price"></td>
+		                                <td><input type="text" class="form-control" id="whdate" maxlength="10" name="whdate"></td>
+		                                <td><input type="date" class="form-control" id="outsstarttime" name="outsstarttime"></td>
+		                                <td><input type="date" class="form-control" id="outsendtime" name="outsendtime"></td>
+		                                <td style="text-align: center;"><input type="checkbox" id="faultycheck" name="faultycheck"></td>
 		                            </form>
 	                            </div>
                             </tr>
@@ -183,18 +189,24 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                	<button type="submit" form="osform" formaction="outsourcingupdate.jsp" formmethod="post" class="btn btn-primary float-right">수정</button>
+                	<button type="submit" form="osform" formaction="outsourcingdelete.jsp" formmethod="post" class="btn btn-danger float-right">삭제</button>
                     <button type="button" class="btn btn-default float-right" data-dismiss="modal">닫기</button>
+                   
+                   
                 </div>
             </div>
             </div>
         </div>
-
+		
         <input type="button" style="display: none;" id="worklogmodalbtn" data-target="#worklogmodal" data-toggle="modal"/>
         <input type="button" style="display: none;" id="outsoumodalbtn" data-target="#outsoumodal" data-toggle="modal"/>
     </body>
 </html>
 
 <script>
+
+
 function dailyWorktsetting(){
 	$.ajax({
 		type:"GET",

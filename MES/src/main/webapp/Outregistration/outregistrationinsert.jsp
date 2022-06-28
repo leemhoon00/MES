@@ -24,8 +24,14 @@
 	String [] arr_end_date=request.getParameterValues("outend_date");
 	String [] arr_faulty=request.getParameterValues("faulty");
 	
-	
-	for(int i=0; i<arr_order.length; i++){
+	int count;
+	if(arr_order == null){
+		count = 0;
+	}
+	else{
+		count = arr_order.length;
+	}
+	for(int i=0; i<count; i++){
 %>
  		<jsp:useBean id="dto" class="outregistration.outregistrationDTO"/>
 		<jsp:setProperty name="dto" property="outsourcing_no" value='<%=Integer.parseInt(arr_id[i])%>'/>

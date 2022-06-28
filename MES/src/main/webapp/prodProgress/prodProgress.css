@@ -167,6 +167,9 @@ body{
     color: white;
     text-align: center;
 }
+.outsourc{   
+    border: 3px dashed black
+}
 .faultybox{
    background:rgb(255, 120, 143);
     border-radius: 5px;

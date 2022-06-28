@@ -5,10 +5,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Date;
 
 import org.json.simple.JSONObject;
 
@@ -343,6 +349,7 @@ public class ProdProgressDAO {
 			List<OrderPartDetailDTO> list = new ArrayList<OrderPartDetailDTO>();
 			String sql = null;
 			int status = 3;
+			
 			//0은 시작대기 1은 진행중 2는 완료
 			
 			try {
@@ -377,23 +384,26 @@ public class ProdProgressDAO {
 			
 			try {
 				for(OrderPartDetailDTO dto : list) {
+					
 					int wt = 0;
 					int price = 0;
-					
+					int proc = 0;
 					if(dto.getOrder_status().equals("내부")) {
-						sql = "SELECT * FROM prodprogressview WHERE order_name = ? AND part_name = ? AND proctype = '사내'";
+						sql = "SELECT * FROM prodprogressview WHERE order_name = ? AND part_name = ?";
 						
 						con = db.getCon();
 						pstmt = con.prepareStatement(sql);
 						pstmt.setString(1, dto.getOrder());
 						pstmt.setString(2, dto.getPart());
 						rs = pstmt.executeQuery();
-						
-						if(rs.isBeforeFirst() == false) {
+					
+						if(rs.isBeforeFirst() == false) {							
 							status = 0;
+							
 						}
 						
 						while(rs.next()) {
+							
 							JSONObject partwork = new JSONObject();
 							
 							String process = rs.getString("process");
@@ -411,11 +421,14 @@ public class ProdProgressDAO {
 							String faulty = rs.getString("faulty");
 							partwork.put("faulty", faulty);
 							
+							String proctype= rs.getString("proctype");
+							partwork.put("proctype", proctype);
+							
 							if(start.length() > 0) {
 								if(end.length() > 0) {
 									partwork.put("workstatus", "completebox");
 									
-									int pwt = rs.getInt("no_men_processing_time") + rs.getInt("work_time");
+									int pwt = rs.getInt("no_men_processing_time") + worktime(rs.getString("start_date"), rs.getString("end_date"));
 									int pp = 0;
 									
 									if(faulty.equals("N")) {
@@ -441,8 +454,10 @@ public class ProdProgressDAO {
 										
 										if(status == 0) {
 											status = 1;
+											
 										}else if(status == 3){
 											status = 2;
+											
 										}
 										
 										partwork.put("worktime", pwt);
@@ -452,14 +467,18 @@ public class ProdProgressDAO {
 								}else {
 									partwork.put("workstatus", "progbox");
 									status = 1;
+									
 								}
 							}else {
+								
 								partwork.put("workstatus", "readybox");
 								
 								if(status == 1 || status == 2) {
 									status = 1;
+									
 								}else {
 									status = 0;
+									
 								}
 								
 							}
@@ -485,6 +504,7 @@ public class ProdProgressDAO {
 						
 						dto.setTotal_work_time(wt);
 						dto.setPrice(price);
+						
 					}
 					
 					//발주 부분
@@ -505,14 +525,31 @@ public class ProdProgressDAO {
 								if(rs.getString("receiving_status").equals("Y")) {
 									dto.setStatus_color("background-color: rgb(94, 169, 255); border: 3px dashed black");
 								}
-							}else {
-								dto.setStatus_color("background-color: rgb(170, 170, 170); border: 3px dashed black");
 							}
+							else {
+								sql = "select * from mes.manage_porder where part_name = ? and order_name = ?";
+								pstmt = con.prepareStatement(sql);
+								pstmt.setString(1, dto.getPart());
+								pstmt.setString(2, dto.getOrder());
+								rs = pstmt.executeQuery();
+								if(rs.next()) {
+									dto.setStatus_color("background-color: rgb(70, 211, 191); border: 3px dashed black");
+									
+									if(rs.getString("receiving_status").equals("Y")) {
+										dto.setStatus_color("background-color: rgb(94, 169, 255); border: 3px dashed black");
+									}
+								}
+								else {
+									dto.setStatus_color("background-color: rgb(170, 170, 170); border: 3px dashed black");
+								}
+							}
+							
 							
 						}catch(Exception e) {
 							e.printStackTrace();
 						}
 					}
+					status = 3;
 				}
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -573,27 +610,26 @@ public class ProdProgressDAO {
             return res;
          }
 		
-		public int writeOrderRequest(OrderRequestDTO dto) { //발주 요청(place_order 저장)
+		public int writeOrderRequest(OrderRequestDTO dto) { //발주 요청(manage_porder 저장)
 			int result = 0;
 			
 			try {
-				String sql = "INSERT INTO place_order VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				String sql = "INSERT INTO manage_porder(part_name,order_name,number_of_request,type) VALUES(?,?,?,?)";
 				
 				con = db.getCon();
 				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, dto.getPorder_no());
-				pstmt.setString(2, dto.getPart_name());
-				pstmt.setString(3, dto.getType());
-				pstmt.setInt(4, dto.getNumber_of_request());
-				pstmt.setString(5, dto.getPorder_company());
-				pstmt.setString(6, dto.p_date());
-				pstmt.setNull(7, java.sql.Types.VARCHAR);
-				pstmt.setString(8, "N");
-				pstmt.setString(9, "");
-				pstmt.setInt(10, dto.getUnit_price());
-				pstmt.setString(11, "");
-				pstmt.setString(12, dto.getOrder_name());
-				pstmt.setString(13, dto.getExp_date());
+				pstmt.setString(1, dto.getPart_name());
+				pstmt.setString(4, dto.getType());
+				pstmt.setInt(3, dto.getNumber_of_request());
+//				pstmt.setString(5, dto.getPorder_company());
+//				pstmt.setString(6, dto.p_date());
+//				pstmt.setNull(7, java.sql.Types.VARCHAR);
+//				pstmt.setString(8, "N");
+//				pstmt.setString(9, "");
+				//pstmt.setInt(10, dto.getUnit_price());
+				//pstmt.setString(11, "");
+				pstmt.setString(2, dto.getOrder_name());
+				//pstmt.setString(13, dto.getExp_date());
 				
 				result = pstmt.executeUpdate();
 				
@@ -631,7 +667,20 @@ public class ProdProgressDAO {
 			
 			return next;
 		}
-		
+		public int worktime(String date1, String date2) {
+			int work_time=0;
+			try {
+				SimpleDateFormat f = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+				Date d1 = f.parse(date1);
+				
+				Date d2 = f.parse(date2);
+				
+				work_time = (int) (d2.getTime() - d1.getTime()) / (1000*60*60);
+				
+			}
+			catch(Exception e) {e.printStackTrace();}
+			return work_time;
+		}
 		public List<String> getCompany(){ //발주 요청을 위한 업체 불러오기
 			List<String> company = new ArrayList<String>();
 			

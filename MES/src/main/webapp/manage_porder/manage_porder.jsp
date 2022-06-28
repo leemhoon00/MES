@@ -54,6 +54,7 @@ int lastpage = (mp.size() - 1) / 10 + 1;
 		var tr = $("#" + myid);
 		var td = tr.children();
 		var part_name = td.eq(1).text();
+		var order_name = td.eq(2).text();
 		var nor = td.eq(3).text();
 		var type = td.eq(4).text();
 		var m_no = td.eq(5).text();
@@ -68,6 +69,7 @@ int lastpage = (mp.size() - 1) / 10 + 1;
 			var cell3 = row.insertCell(2);
 			var cell4 = row.insertCell(3);
 			var cell5 = row.insertCell(4);
+			var cell6 = row.insertCell(5);
 			cell1.innerHTML = '<input type="text" id="p' + myid + '" name="npart_name" value="'
 					+ part_name
 					+ '" class="form-control" readonly style="width:80%; margin-top:10px;">';
@@ -77,6 +79,7 @@ int lastpage = (mp.size() - 1) / 10 + 1;
 			cell3.innerHTML = '<input type="text" id="c' + myid + '" name="nprice" class="form-control" style="width:80%; margin-top:10px;">';
 			cell4.innerHTML = '<input type="text" name="ntype" value="'+ type +'" class="form-control" style="display:none;">';
 			cell5.innerHTML = '<input type="text" name="nm_no" value="'+ m_no +'" class="form-control" style="display:none;">';
+			cell6.innerHTML = '<input type="text" name="norder_name" value="'+ order_name +'" class="form-control" style="display:none;">';
 			trcolor.style.background = 'rgb(68,80,132)';
 			checkarr.push(pushid);
 		}
@@ -335,6 +338,7 @@ int lastpage = (mp.size() - 1) / 10 + 1;
 							<td><%=mp.get(i).getNumber_of_request()%></td>
 							<td style="display:none;"><%=mp.get(i).getType()%></td>
 							<td style="display:none;"><%=mp.get(i).getM_no() %></td>
+							
 						</tr>
 						<script>
 							var tr = document.getElementById("tr");
