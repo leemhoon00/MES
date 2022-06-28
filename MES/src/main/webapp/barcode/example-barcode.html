@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="barcode-reader-1.0.0.total.js"></script>
+    <script type="text/javascript">
+        barcodeReaderCallback = function(data) {
+            $("#test").text(data)
+        }
+    </script>
+</head>
+
+<body>
+    <h1>키보드의 아무 키를 눌러보세요</h1>
+    <input />
+    <h3 id="test"></h3>
+</body>
+
+</html>

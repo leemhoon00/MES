@@ -527,25 +527,22 @@
     $(".dropdown-submenu").on("click",function(){
     	event.stopPropagation()
     	let selectedid = $(this).attr('value');
+    	
     	switch (selectedid){
     	case "수주 비상":
-			// $("#pframe").attr('src',
-            changePage('Order/Order.jsp', "수주 관리");
+			$("#pframe").attr('src', 'Order/Order.jsp');
 			break;
 			
     	case "불량 갯수":
-			// $("#pframe").attr('src',
-            changePage('faulty/faulty.jsp', "불량 관리");
+			$("#pframe").attr('src','faulty/faulty.jsp');
 			break;
 			
     	case "부품 부족":
-			// $("#pframe").attr('src',
-            changePage('part/part_management.jsp', "부품 관리");
+			$("#pframe").attr('src', 'part/part_management.jsp');
 			break;
 			
     	case "자재 부족":
-			// $("#pframe").attr('src',
-            changePage('material/material.jsp', "자재 관리");
+			$("#pframe").attr('src', 'material/material.jsp');
 			break;
     	}
     });
@@ -555,9 +552,6 @@
     $(".sidemenuselect").on("click",function(){
     	event.stopPropagation()
     	let selectedid = $(this).attr('id');
-        console.log($(this).text());
-        
-        let pageName = $(this).text();
     	
     	switch (selectedid){
     	
@@ -570,162 +564,131 @@
 			break;
     	
     		case "board":
-    			// $("#pframe").attr('src',
-                changePage('board/board.jsp', pageName);
+    			$("#pframe").attr('src', 'board/board.jsp');
     			break;
     			
     		case "userinformation":
-    			// $("#pframe").attr('src',
-                changePage('admin/user_management.jsp', pageName);
+    			$("#pframe").attr('src','admin/user_management.jsp');
     			break;
     			
     		case "part":
-    			// $("#pframe").attr('src',
-                changePage('part/part_management.jsp', pageName);
+    			$("#pframe").attr('src', 'part/part_management.jsp');
     			break;
     		
     		case "material":
-    			// $("#pframe").attr('src',
-                changePage('material/material.jsp', pageName);
+    			$("#pframe").attr('src', 'material/material.jsp');
     			break;
     			
     		case "commoncode":
-    			// $("#pframe").attr('src',
-                changePage('common_code/common_code.jsp', pageName);
+    			$("#pframe").attr('src', 'common_code/common_code.jsp');
     			break;
     			
     		case "order":
-    			// $("#pframe").attr('src',
-                changePage('Order/Order.jsp', pageName);
+    			$("#pframe").attr('src', 'Order/Order.jsp');
     			break;
     			
     		case "quotation":
-    			// $("#pframe").attr('src',
-                changePage('estimate/estimate.jsp', pageName);
+    			$("#pframe").attr('src', 'estimate/estimate.jsp');
     			break;
     			
     		case "facilities":
-    			// $("#pframe").attr('src',
-                changePage('facilities/facilities.jsp', pageName);
+    			$("#pframe").attr('src', 'facilities/facilities.jsp');
     			break;
     		
     		case "stanprocess":
-    			// $("#pframe").attr('src',
-                changePage('standardProcess/standardProcess.jsp', pageName);
+    			$("#pframe").attr('src','standardProcess/standardProcess.jsp');
     			break;
     			
     		case "company":
-    			// $("#pframe").attr('src',
-                changePage('Company/company.jsp', pageName);
+    			$("#pframe").attr('src','Company/company.jsp');
     			break;
     			
     		case "usermenu":
-    			// $("#pframe").attr('src',
-                changePage('userMenu/userMenu.jsp', pageName);
+    			$("#pframe").attr('src','userMenu/userMenu.jsp');
     			break;
     			
     		case "orderb":
-    			// $("#pframe").attr('src',
-                changePage('manage_porder/manage_porder.jsp', pageName);
+    			$("#pframe").attr('src','manage_porder/manage_porder.jsp');
     			break;
     			
     		case "outsourcing":
-    			// $("#pframe").attr('src',
-                changePage('Outsourcing/outsourcing.jsp', pageName);
+    			$("#pframe").attr('src','Outsourcing/outsourcing.jsp');
     			break;
     			
     		case "io":
-    			// $("#pframe").attr('src',
-                changePage('inandout/inandout.jsp', pageName);
+    			$("#pframe").attr('src','inandout/inandout.jsp');
     			break;
     			
     		case "allwork":
-    			// $("#pframe").attr('src',
-                changePage('dailyWork/dailyWork.jsp', pageName);
+    			$("#pframe").attr('src','dailyWork/dailyWork.jsp');
     			break;
     			
     		case "mywork":
-    			// $("#pframe").attr('src',
-                changePage('my_work/my_work.jsp', pageName);
+    			$("#pframe").attr('src','my_work/my_work.jsp');
     			break;
     			
     		case "materialcur":
-    			// $("#pframe").attr('src',
-                changePage('pminquiry/pminquiry.jsp', pageName);
+    			$("#pframe").attr('src','pminquiry/pminquiry.jsp');
     			break;
     		
     		case "outsourcwork":
-    			// $("#pframe").attr('src',
-                changePage('Outregistration/outregistration.jsp', pageName);
+    			$("#pframe").attr('src','Outregistration/outregistration.jsp');
     			break;
     			
     		case "faulty":
-    			// $("#pframe").attr('src',
-                changePage('faulty/faulty.jsp', pageName);
+    			$("#pframe").attr('src','faulty/faulty.jsp');
     			break;
     			
     		case "performancecur":
-    			// $("#pframe").attr('src',
-                changePage('performance_by_worker/performance_by_worker.jsp', pageName);
+    			$("#pframe").attr('src','performance_by_worker/performance_by_worker.jsp');
     			break;
     			
     		case "productionprog":
-    			// $("#pframe").attr('src',
-                changePage('prodProgress/prodProgress.jsp', pageName);
+    			$("#pframe").attr('src','prodProgress/prodProgress.jsp');
     			break;
     			
     		case "workcheck":
-    			// $("#pframe").attr('src',
-                changePage('dashboardorder/dashboardorder.jsp', pageName);
+    			$("#pframe").attr('src','dashboardorder/dashboardorder.jsp');
     			break;
     			
     		case "outsourccostcur":
-    			// $("#pframe").attr('src',
-                changePage('dashboardoutsourcing/dashboardoutsourcing.jsp', pageName);
+    			$("#pframe").attr('src','dashboardoutsourcing/dashboardoutsourcing.jsp');
     			break;
     			
     		case "facilitiesopercur":
-    			// $("#pframe").attr('src',
-                changePage('performance_by_facility/performance_by_facility.jsp', pageName);
+    			$("#pframe").attr('src','performance_by_facility/performance_by_facility.jsp');
     			break;
     		
     		case "faultycur":
-    			// $("#pframe").attr('src',
-                changePage('defectivePerform/defectiveP.jsp', pageName);
+    			$("#pframe").attr('src','defectivePerform/defectiveP.jsp');
     			break;
     			
     		case "suppliescur":
-    			// $("#pframe").attr('src',
-                changePage('consumables/consumables.jsp', pageName);
+    			$("#pframe").attr('src','consumables/consumables.jsp');
     			break;
     			
     		case "pqcdcur":
-    			// $("#pframe").attr('src',
-                changePage('pqcd/pqcd.jsp', pageName);
+    			$("#pframe").attr('src','pqcd/pqcd.jsp');
     			break;
     			
     		case "progress":
-    			window.open("statusProgress/statusProgress.jsp", pageName);
+    			window.open("statusProgress/statusProgress.jsp");
     			break;
     			
     		case "order_process":
-    			// $("#pframe").attr('src',
-                changePage('order_process/order_process.jsp', pageName);
+    			$("#pframe").attr('src','order_process/order_process.jsp');
     			break;
     			
     		case "facilitiesph":
-    			// $("#pframe").attr('src',
-                changePage('facilitiesph/facilitiesph.jsp', pageName);
+    			$("#pframe").attr('src','facilitiesph/facilitiesph.jsp');
     			break;
     		
     		case "facilitiescheck":
-    			// $("#pframe").attr('src',
-                changePage('facilitiescheck/facilitiescheck.jsp', pageName);
+    			$("#pframe").attr('src','facilitiescheck/facilitiescheck.jsp');
     			break;
     			
     		case "order_requirement":
-    			// // $("#pframe").attr('src',
-                changePage('order_requirement/order_requirement.jsp', pageName);
+    			$("#pframe").attr('src','order_requirement/order_requirement.jsp');
     			break;
     			
  
