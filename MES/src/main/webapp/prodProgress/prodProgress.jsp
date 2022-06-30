@@ -364,6 +364,8 @@
                              $("#partsMquantity" + i).val(partinfo["quantity"]);
                              $("#partsMorderstatus" + i).val(partinfo["order_status"]).prop("selected",true);
                              $("#partsMorderstatus" + i).attr("readonly",true);
+                             $("#pboidtext" + i).val(partinfo["pbo_id"]);
+                             
                           }
                        },
                        error:function(){
@@ -494,6 +496,9 @@
                   rowItem+="</td>";
                   rowItem+="<td>";
                   rowItem+="<input type='button' id='partsMdelbtn' class='btn btn-common' name='partsMinput' value='삭제' onclick='delInsert(this)'>";
+                  rowItem+="</td>";
+                  rowItem+="<td>";
+                  rowItem+="<input type='text' id='pboidtext" + indexx + "' name='npboidtext' value='new'>";
                   rowItem+="</td>";
                   rowItem+="</tr>";
                   

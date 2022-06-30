@@ -1,3 +1,5 @@
+<!-- 나의 작업 일보 수정 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -136,6 +138,10 @@ query = "update my_work set work_start="+work_start+", work_end="+work_end+", fa
 
 
 stmt.executeUpdate(query);
+
+stmt.close();
+conn.close();
+
 response.sendRedirect("dailyWork.jsp");
 	
 	

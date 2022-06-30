@@ -1,4 +1,4 @@
-<!-- 외주 저장 -->
+<!-- 외주 삭제 -->
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
@@ -31,17 +31,15 @@
 <body>
 <%
 String p1 = request.getParameter("p1");
-String p2 = request.getParameter("p2");
+query = "delete from mes.outsourcing where outsourcing_no="+p1;
 
-out.println(p1);
-out.println(p2);
-
-query = "update outsourcing set warehousing_date = '"+p2+"', type='완료' where outsourcing_no = "+p1;
 stmt = conn.createStatement();
 stmt.executeUpdate(query);
 
+stmt.close();
+conn.close();
+
 response.sendRedirect("inandout.jsp");
 %>
-
 </body>
 </html>

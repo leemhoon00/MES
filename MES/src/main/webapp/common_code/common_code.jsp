@@ -1,3 +1,5 @@
+<!-- 공통 코드 관리 페이지 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,11 +13,8 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
-	String query2= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
 	String dbUser = "Usera";
@@ -107,6 +106,8 @@ var selectedmain = "선택";
 				<%} %>
 				
 				<script>
+				
+				//그룹 셀렉트박스 change 이벤트
 				function groupchange(){
 					selectedgroup = document.getElementById("groupselect").value;
 					document.getElementById("txtmaingroup").value = selectedgroup;
@@ -144,6 +145,7 @@ var selectedmain = "선택";
 				<option class="Allmain <%=rs.getString("group_code") %>" value="<%=rs.getString("main_code").replace(" ","_")%>"><%=rs.getString("main_code")%></option>
 				<% } %>
 				<script>
+				//메인코드 셀렉트박스 change 이벤트
 				function mainchange(){
 					selectedmain = document.getElementById("mainselect").value;
 					if(selectedmain=="선택"){
@@ -154,7 +156,7 @@ var selectedmain = "선택";
 						document.getElementById("txtmainmain").value = selectedmain;
 						for(var i=0; i<mainclass.length;i++){
 							if(mainclass[i].main_code == selectedmain){
-								document.getElementById("maincontents").value = mainclass[i].contents.replaceAll("^&^&","\n");
+								document.getElementById("maincontents").value = mainclass[i].contents.replaceAll("^&^&","\n");//줄바꿈 처리
 								document.getElementById("txtmaingroup").value = mainclass[i].group_code;
 							}
 						}
@@ -182,6 +184,7 @@ var selectedmain = "선택";
 			  전체보기
 			</button>
 			<script>
+			//전체보기 버튼 이벤트
 			function wholebutton(){
 				trs = document.querySelectorAll(".modalgrouptrs");
 				for(var i=0; i<trs.length; i++){
@@ -547,5 +550,10 @@ var selectedmain = "선택";
 		</div>
 	</div>
 </div>
+<%
+rs.close();
+stmt.close();
+conn.close();
+%>
 </body>
 </html>

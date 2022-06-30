@@ -45,7 +45,9 @@ public class InsertInfo extends HttpServlet {
             String[] partname = request.getParameterValues("partsMpartsname");
             String[] quantity = request.getParameterValues("partsMquantity");
             String[] o_status = request.getParameterValues("partsMorderstatus");
+            String[] pbo_id = request.getParameterValues("npboidtext");
             
+           
             dao.allDelParts(ordername);
             
             for(int i=0; i<layer.length; i++) {
@@ -66,7 +68,9 @@ public class InsertInfo extends HttpServlet {
                dto.setPbo_id(dao.getNext());
                
                dao.writeOrderParts(dto);
+               
             }
+            dao.writemp(partname, quantity, o_status, pbo_id, ordername);
             
             result.put("result", success);
          }else {

@@ -1,3 +1,5 @@
+<!-- 부품 등록 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -12,7 +14,6 @@
 Class.forName("com.mysql.jdbc.Driver");
 Connection conn = null;
 Statement stmt = null;
-ResultSet rs = null;
 String query= null;
 
 String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -67,7 +68,8 @@ else{
 	}
 	
 }
-
+stmt.close();
+conn.close();
 %>
 </body>
 </html>

@@ -1,3 +1,5 @@
+<!-- 서브 코드 삭제 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -37,6 +39,8 @@
 		// Run Qeury 
 		stmt.executeUpdate(query);
 		
+		stmt.close();
+		conn.close();
 		response.sendRedirect("common_code.jsp");
 	}
 	

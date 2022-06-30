@@ -1,3 +1,5 @@
+<!-- 서브 코드 추가 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -63,6 +65,9 @@ else{
 		response.sendRedirect("common_code.jsp");
 	}catch(Exception e){
 		out.println("<script>alert('이미있는 서브코드 입니다.');document.location.href='common_code.jsp';</script>");
+	}finally{
+		stmt.close();
+		conn.close();
 	}
 	
 }

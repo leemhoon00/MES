@@ -1,3 +1,5 @@
+<!-- 나의 작업 일보 등록 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -140,6 +142,7 @@ if(status.equals("완료")){
 		int temp = rs.getInt("pay");
 		manufacturing_cost = ((int)work_time+no_men_processing_time)*temp;
 	}
+	rs.close();
 	
 	
 }
@@ -155,6 +158,10 @@ else{
 	
 	
 	stmt.executeUpdate(query);
+	
+	stmt.close();
+	conn.close();
+	
 	response.sendRedirect("my_work.jsp");
 	
 	

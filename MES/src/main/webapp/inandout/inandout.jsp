@@ -1,3 +1,5 @@
+<!-- 입출고 관리 페이지 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -14,9 +16,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -28,6 +28,7 @@
 <%
 int temp;
 
+//발주 관련 페이지네이션 용
 int orderrowcount=0;
 query="select count(*) from place_order";
 rs=stmt.executeQuery(query);
@@ -37,6 +38,7 @@ if(orderrowcount != 0){
 	orderlastpagenumber = (orderrowcount-1)/10 +1;
 }
 
+//외주 관련 페이지네이션 용
 int outsourcingrowcount=0;
 query="select count(*) from outsourcing";
 rs=stmt.executeQuery(query);
@@ -74,9 +76,14 @@ rs=stmt.executeQuery(query);
 </head>
 <body>
 <script>
+	//셀렉트박스가 발주인지 외주인지 저장하는 변수
 	var selectbox = "발주";
+	//선택된 발주 변수
 	var selectedorder = "";
+	//선택된 외주 변수
 	var selectedoutsourcing = "";
+	
+	//페이지네이션 용
 	var orderlastpage = <%=orderlastpagenumber%>
 	var outsourcinglastpage = <%=outsourcinglastpagenumber%>
 </script>
@@ -98,6 +105,7 @@ rs=stmt.executeQuery(query);
 				<input type="checkbox" id="hurryup" onclick="checkboxchange(this)">
 				<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">입고</button>
 				<button class="btn btn-info" onclick="showorder()" id="showorderbutton" data-bs-toggle="modal" data-bs-target="#exampleModal2">발주서 보기</button>
+				<button class="btn btn-danger" type="button" onclick="deletebutton()">삭제</button>
 			</div>
 		</div>
 	</div>
@@ -120,6 +128,25 @@ rs=stmt.executeQuery(query);
 			else{
 				outsourcingsetdisplay(1);
 				document.getElementById("outsourcingpageul").style.display="";
+			}
+		}
+	}
+	
+	function deletebutton(){
+		if(selectbox=="발주"){
+			if(selectedorder==""){
+				alert("발주를 선택해주세요");
+			}
+			else{
+				location.href="orderdelete.jsp?p1="+selectedorder;
+			}
+		}
+		else if(selectbox=="외주"){
+			if(selectedoutsourcing==""){
+				alert("외주를 선택해주세요");
+			}
+			else{
+				location.href="outsourcingdelete.jsp?p1="+selectedoutsourcing;
 			}
 		}
 	}
@@ -150,6 +177,7 @@ rs=stmt.executeQuery(query);
 		}
 	}
 	
+	//검색
 	function search(element){
 		
 		//셀렉트박스가 발주일때
@@ -409,6 +437,7 @@ rs=stmt.executeQuery(query);
 		</div>
 	</div>
 	<script>
+	
 	function savebutton(){
 		if(selectbox =="발주" && selectedorder != ""){
 			p1 = document.getElementById("order"+selectedorder).children[0].innerHTML;
@@ -810,5 +839,11 @@ rs=stmt.executeQuery(query);
 			</script>
         </div>
 	</div>
+	
+	<%
+	rs.close();
+	stmt.close();
+	conn.close();
+	%>
 </body>
 </html>

@@ -1,3 +1,5 @@
+<!-- 나의 작업 일보 수정 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -120,6 +122,7 @@ if(status.equals("완료")){
 		int temp = rs.getInt("pay");
 		manufacturing_cost = ((int)work_time+no_men_processing_time)*temp;
 	}
+	rs.close();
 	
 }
 
@@ -127,14 +130,12 @@ if(status.equals("완료")){
 query = "update my_work set work_start="+work_start+", work_end="+work_end+", faulty ='"+faulty+"', status='"+status+"', regdate='"+regdate+"', work_time="+work_time+", real_processing_time="+real_processing_time+", no_men_processing_time="+no_men_processing_time+", un_processing_time="+un_processing_time+", total_work_time="+total_work_time+", total_processing_time="+total_processing_time+", worker='"+worker+"', manufacturing_cost="+manufacturing_cost+" where work_id="+work_id;
 
 
-
 stmt.executeUpdate(query);
+
+stmt.close();
+conn.close();
+
 response.sendRedirect("my_work.jsp");
-	
-	
-
-	
-
 
 %>
 </body>

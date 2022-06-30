@@ -1,3 +1,5 @@
+<!-- 부품 삭제 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -39,8 +41,12 @@
 		query = "delete from user_menu where user_id='"+adminid+"'";
 		stmt.executeUpdate(query);
 		
+		stmt.close();
+		conn.close();
+		
 		response.sendRedirect("user_management.jsp");
 	}
+	
 	
 	%>
 </body>

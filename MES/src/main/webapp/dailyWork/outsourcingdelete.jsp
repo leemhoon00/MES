@@ -1,3 +1,5 @@
+<!-- 외주 작업 일보 삭제 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -34,6 +36,9 @@ conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
 stmt = conn.createStatement();
 // Run Qeury 
 stmt.executeUpdate(query);
+
+stmt.close();
+conn.close();
 
 response.sendRedirect("dailyWork.jsp");
 

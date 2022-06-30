@@ -1,3 +1,5 @@
+<!-- 나의 작업 일보 페이지 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -78,7 +78,10 @@ while(rs.next()){
 	i++;
 }
 
+//db 조회 상 마지막 행의 order번호
 int datalastdivnum = 0;
+
+//작업 추가했을때를 대비한 화면상의 마지막 행의 order번호
 int lastdivnum = 0;
 
 
@@ -318,6 +321,8 @@ rs=stmt.executeQuery(query);
 		<div>
 			<button class="btn btn-info float-right" style="margin-right: 5px;" onclick="addbutton()">작업추가</button>
 			<script>
+			
+			//작업추가 버튼
 				function addbutton(){
 					lastdivnum++;
 					var template = document.getElementById('template').cloneNode(true);
@@ -345,6 +350,7 @@ rs=stmt.executeQuery(query);
 					
 				}
 				
+			//수주가 바꼈을 때 부품명 셀렉트박스의 옵션값 업데이트
 				function orderchange(element){
 					var order = element.value;
 					var com = ordertocom.get(order);
@@ -360,6 +366,7 @@ rs=stmt.executeQuery(query);
 			       });
 				}
 				
+				//공정이 바꼈을 때 설비의 셀렉트박스의 옵션값 업데이트
 				function processchange(element){
 					var process = element.value;
 					$.ajax({
@@ -373,6 +380,7 @@ rs=stmt.executeQuery(query);
 			       });
 				}
 				
+				
 				function deletebutton(element){
 					element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
 				}
@@ -380,6 +388,8 @@ rs=stmt.executeQuery(query);
 		</div>
 	</div>
 </div>
+
+<!-- 작업 추가 버튼을 눌렀을 때 생성되는  div의 원본 템플릿 -->
 <div id="template" style="display:none">
 	<form>
 		<input type="text" style="display:none" name="work_id">
@@ -495,6 +505,10 @@ rs=stmt.executeQuery(query);
 		</table>
 	</form>
 </div>
-
+<%
+rs.close();
+stmt.close();
+conn.close();
+%>
 </body>
 </html>

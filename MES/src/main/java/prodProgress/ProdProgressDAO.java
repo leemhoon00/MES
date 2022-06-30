@@ -212,13 +212,41 @@ public class ProdProgressDAO {
 	         pstmt.setString(6, dto.getLayer());
 	         
 	         res=pstmt.executeUpdate();
+	    
 	         pstmt.close();
+	      
 	      }catch(Exception e) {
 	         e.printStackTrace();
 	      }finally {
 	         db.close();
 	      }
+	      
+	      
 	      return res;
+	   }
+	   
+	   public void writemp(String[] part_name, String []nor, String[] status, String[] pbo_id, String ordername) {
+		   try {
+			   String sql = "insert into manage_porder(part_name, order_name, number_of_request, type) values(?, ?, ?, ?)";
+			   con = db.getCon();
+			   PreparedStatement pstmt = con.prepareStatement(sql);
+			   for(int i=0; i<part_name.length; i++) {
+				   
+				   if(status[i].equals("발주") && pbo_id[i].equals("new")) {				   
+					   pstmt.setString(1, part_name[i]);
+					   pstmt.setString(2, ordername);
+					   pstmt.setInt(3, Integer.parseInt(nor[i]));
+					   pstmt.setString(4, "CORE");
+					   pstmt.executeUpdate();
+				   }
+			   }
+			   pstmt.close();
+			   db.close();
+		   }
+		   catch(Exception e) {
+			   e.printStackTrace();
+		   }
+		   
 	   }
 	   
 	
@@ -526,22 +554,8 @@ public class ProdProgressDAO {
 									dto.setStatus_color("background-color: rgb(94, 169, 255); border: 3px dashed black");
 								}
 							}
-							else {
-								sql = "select * from mes.manage_porder where part_name = ? and order_name = ?";
-								pstmt = con.prepareStatement(sql);
-								pstmt.setString(1, dto.getPart());
-								pstmt.setString(2, dto.getOrder());
-								rs = pstmt.executeQuery();
-								if(rs.next()) {
-									dto.setStatus_color("background-color: rgb(70, 211, 191); border: 3px dashed black");
-									
-									if(rs.getString("receiving_status").equals("Y")) {
-										dto.setStatus_color("background-color: rgb(94, 169, 255); border: 3px dashed black");
-									}
-								}
-								else {
-									dto.setStatus_color("background-color: rgb(170, 170, 170); border: 3px dashed black");
-								}
+							else {								
+								dto.setStatus_color("background-color: rgb(170, 170, 170); border: 3px dashed black");
 							}
 							
 							
@@ -610,29 +624,35 @@ public class ProdProgressDAO {
             return res;
          }
 		
-		public int writeOrderRequest(OrderRequestDTO dto) { //발주 요청(manage_porder 저장)
+		public int writeOrderRequest(OrderRequestDTO dto) { //발주 요청(place_order 저장)
 			int result = 0;
 			
 			try {
-				String sql = "INSERT INTO manage_porder(part_name,order_name,number_of_request,type) VALUES(?,?,?,?)";
-				
+				String sql = "INSERT INTO place_order VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				String delsql = "delete from manage_porder where part_name = ? and order_name = ?";
 				con = db.getCon();
 				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, dto.getPart_name());
-				pstmt.setString(4, dto.getType());
-				pstmt.setInt(3, dto.getNumber_of_request());
-//				pstmt.setString(5, dto.getPorder_company());
-//				pstmt.setString(6, dto.p_date());
-//				pstmt.setNull(7, java.sql.Types.VARCHAR);
-//				pstmt.setString(8, "N");
-//				pstmt.setString(9, "");
-				//pstmt.setInt(10, dto.getUnit_price());
-				//pstmt.setString(11, "");
-				pstmt.setString(2, dto.getOrder_name());
-				//pstmt.setString(13, dto.getExp_date());
+				pstmt.setInt(1, dto.getPorder_no());
+				pstmt.setString(2, dto.getPart_name());
+				pstmt.setString(3, dto.getType());
+				pstmt.setInt(4, dto.getNumber_of_request());
+				pstmt.setString(5, dto.getPorder_company());
+				pstmt.setString(6, dto.p_date());
+				pstmt.setNull(7, java.sql.Types.VARCHAR);
+				pstmt.setString(8, "N");
+				pstmt.setString(9, "");
+				pstmt.setInt(10, dto.getUnit_price());
+				pstmt.setString(11, "");
+				pstmt.setString(12, dto.getOrder_name());
+				pstmt.setString(13, dto.getExp_date());
 				
 				result = pstmt.executeUpdate();
 				
+				pstmt = con.prepareStatement(delsql);
+				pstmt.setString(1, dto.getPart_name());
+				pstmt.setString(2, dto.getOrder_name());
+				
+				pstmt.executeUpdate();
 				pstmt.close();
 			}catch(Exception e) {
 				e.printStackTrace();

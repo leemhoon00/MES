@@ -1,3 +1,5 @@
+<!-- 메인 코드 추가 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,7 +13,6 @@
 Class.forName("com.mysql.jdbc.Driver");
 Connection conn = null;
 Statement stmt = null;
-ResultSet rs = null;
 String query= null;
 
 String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -48,6 +49,9 @@ else{
 		response.sendRedirect("common_code.jsp");
 	}catch(Exception e){
 		out.println("<script>alert('이미있는 메인코드 입니다.');document.location.href='common_code.jsp';</script>");
+	}finally{
+		stmt.close();
+		conn.close();
 	}
 	
 }

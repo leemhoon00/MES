@@ -1,3 +1,5 @@
+<!-- 공정셀렉트 값의 변화에 따른 설비 셀렉트박스의 값 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -41,6 +41,10 @@ rs=stmt.executeQuery(query);
 while(rs.next()){
 %>
 <option value="<%=rs.getString("sub_proc")%>"><%=rs.getString("sub_proc")%></option>
-<%} %>
+<%} 
+rs.close();
+stmt.close();
+conn.close();
+%>
 </body>
 </html>

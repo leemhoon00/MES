@@ -1,3 +1,5 @@
+<!-- 발주 저장 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -36,6 +36,9 @@ String p2 = request.getParameter("p2");
 query = "update place_order set receiving_day = '"+p2+"', receiving_status='Y' where porder_no = "+p1;
 stmt = conn.createStatement();
 stmt.executeUpdate(query);
+
+stmt.close();
+conn.close();
 
 response.sendRedirect("inandout.jsp");
 %>

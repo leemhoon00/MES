@@ -13,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -28,11 +26,13 @@
 <%
 String temp="";
 
-//rowcount = row갯수
+//rowcount = row갯수 (페이지네이션 용)
 int rowcount=0;
 query="select count(*) from user";
 rs=stmt.executeQuery(query);
 if(rs.next()){rowcount=rs.getInt(1);}
+
+//lastpagenumber : 페이지네이션 용 마지막페이지
 int lastpagenumber=1;
 if(rowcount != 0){
 	lastpagenumber = (rowcount-1)/10 +1;
@@ -166,8 +166,10 @@ rs=stmt.executeQuery(query);
 						</thead>
 						<tbody style="border-top: none;">
 						<%
+						//페이지네이션 용
 						int count=0;
 						int pagegroup=0;
+						
 						while(rs.next()){
 							count++;
 							if(count % 10 ==1){
@@ -222,7 +224,7 @@ rs=stmt.executeQuery(query);
 							element.style.backgroundColor="lightgray";
 						}
 						
-						//페지네이션
+						//페이지네이션
 						function setdisplay(groupnumber){
 							var trs = document.querySelectorAll(".trs");
 							for(var i=0; i<trs.length; i++){
@@ -403,5 +405,10 @@ rs=stmt.executeQuery(query);
 			</div>
 		</div>
 	</div>
+	<%
+	rs.close();
+	stmt.close();
+	conn.close();
+	%>
 </body>
 </html>
