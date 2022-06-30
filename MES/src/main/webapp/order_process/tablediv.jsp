@@ -1,3 +1,5 @@
+<!-- 수주 공정 관리 table DIV -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -127,6 +129,7 @@ var ordername = '<%=ordername%>';
 		</tbody>
 	</table>
 	<script>
+	//열 체크 이벤트
 	function processchecked(element){
 		var trs = document.querySelectorAll("."+element.value);
 		
@@ -146,6 +149,7 @@ var ordername = '<%=ordername%>';
 		}
 	}
 	
+	//행 체크 이벤트
 	function partchecked(element){
 		var trs = document.querySelectorAll("."+element.value);
 		
@@ -166,6 +170,7 @@ var ordername = '<%=ordername%>';
 		
 	}
 	
+	//체크박스 체크 이벤트
 	function checkboxchanged(element){
 		$.ajax({
 			type:"GET",

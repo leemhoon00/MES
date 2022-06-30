@@ -1,3 +1,5 @@
+<!-- 수주 부품 조회 DIV -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -55,6 +57,8 @@
 	else{
 		query = "select count(*) from parts_by_order where parts_by_order.order = '"+order+"'";
 	}
+	
+	//페이지네이션 관련
 	rs=stmt.executeQuery(query);
 	if(rs.next()){rowcount=rs.getInt(1);}
 	int lastpagenumber=1;

@@ -1,3 +1,5 @@
+<!-- 수주 조회 DIV -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -48,12 +50,16 @@
 
 	int rowcount=0;
 	String order = request.getParameter("order");
+	
+	
 	if(order == null || order.equals("")){
 		query = "select count(*) from mes.order";
 	}
 	else{
 		query = "select count(*) from mes.order where item_no like '%"+order+"%'";
 	}
+	
+	//페이지네이션 관련
 	rs=stmt.executeQuery(query);
 	if(rs.next()){rowcount=rs.getInt(1);}
 	int lastpagenumber=1;

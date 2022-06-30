@@ -1,3 +1,5 @@
+<!-- 부품 등록,수정 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -12,7 +14,6 @@
 Class.forName("com.mysql.jdbc.Driver");
 Connection conn = null;
 Statement stmt = null;
-ResultSet rs = null;
 String query= null;
 
 String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -30,6 +31,7 @@ conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
 </head>
 <body>
 <%
+//submitcheck가 1이면 수정 아니면 등록
 String submitcheck = request.getParameter("submitcheck");
 
 String part_name = request.getParameter("part_name");
@@ -62,6 +64,9 @@ else{
 	try{
 		stmt = conn.createStatement();
 		stmt.executeUpdate(query);
+		
+		stmt.close();
+		conn.close();
 		response.sendRedirect("part_management.jsp");
 	}catch(Exception e){
 		out.println("<script>alert('이미있는 부품명 입니다.');document.location.href='part_management.jsp';</script>");

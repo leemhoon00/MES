@@ -1,3 +1,5 @@
+<!-- 전달 받은 두 날짜로 설비 가동 현황 계산 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -36,9 +38,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -200,7 +200,7 @@ array[<%=i%>][<%=j%>] = '<%=array[i][j]%>';
 	}
 	
 	
-	
+	//구글 차트
 	google.charts.load('current', {'packages':['bar']});
     google.charts.setOnLoadCallback(drawChart);
 
@@ -222,6 +222,7 @@ array[<%=i%>][<%=j%>] = '<%=array[i][j]%>';
 </script>
 </head>
 <body>
+	<!-- 차트 영역 -->
 	<div class="card">
 		<div class="card-body" id="columnchart_material">
 		
@@ -251,5 +252,11 @@ array[<%=i%>][<%=j%>] = '<%=array[i][j]%>';
 			</table>
 		</div>
 	</div>
+	
+	<%
+	rs.close();
+	stmt.close();
+	conn.close();
+	%>
 </body>
 </html>

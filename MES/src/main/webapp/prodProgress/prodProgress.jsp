@@ -497,7 +497,7 @@
                   rowItem+="<td>";
                   rowItem+="<input type='button' id='partsMdelbtn' class='btn btn-common' name='partsMinput' value='삭제' onclick='delInsert(this)'>";
                   rowItem+="</td>";
-                  rowItem+="<td>";
+                  rowItem+="<td style='display:none'>";
                   rowItem+="<input type='text' id='pboidtext" + indexx + "' name='npboidtext' value='new'>";
                   rowItem+="</td>";
                   rowItem+="</tr>";

@@ -4,6 +4,10 @@
 <%@ page import="dbcon.estimatedb"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.io.PrintWriter"%>
+<%@ page import = "java.text.DecimalFormat"%>
+<%@ page import = "java.text.NumberFormat"%>
+<%@ page import = "java.util.Locale"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -699,9 +703,14 @@ function exceldownload(){
 	
 }
 
-
 </script>
-
+<%!
+public String commaj(int s){
+	DecimalFormat df = new DecimalFormat("###,###");
+	String money = df.format(s);
+	return money;
+}
+%>
 </head>
 <body>
 	<div class="title">영업 관리/견적서 관리</div>
@@ -819,7 +828,7 @@ function exceldownload(){
 							<td><%=degreev.get(i).getEt_id()%></td>
 							<td><%=degreev.get(i).getDegree()%></td>
 							<td><%=degreev.get(i).getEt_com_name()%></td>
-							<td><%=degreev.get(i).getEt_price()%></td>
+							<td><%=commaj(degreev.get(i).getEt_price())%></td>
 							<td><%=degreev.get(i).getEt_date()%></td>
 							<td style="display:none;"><%=degreev.get(i).getEt_explain()%></td>
 						</tr>

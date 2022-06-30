@@ -1,3 +1,5 @@
+<!-- 설비 가동 현황 -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
@@ -66,6 +68,7 @@
 	</div>
 	
 	<script>
+	
 	window.onload = function(){
 		var today = new Date();
 		var year = today.getFullYear();

@@ -13,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -28,6 +26,7 @@
 <%
 String temp="";
 
+//페이지네이션 관련
 //rowcount = row갯수
 int rowcount=0;
 query="select count(*) from part";
@@ -70,7 +69,7 @@ rs=stmt.executeQuery(query);
 </head>
 <body>
 	<label class="title">자재 제품 관리 / 부품 관리</label>
-	
+
 <!--------------------------------------------- 윗 섹션 ----------------------------------------------->
 
 	<div class="card">
@@ -167,6 +166,7 @@ rs=stmt.executeQuery(query);
 						<tbody style="border-top: none;">
 						
 						<%
+						//페이지네이션 관련 변수
 						int count=0;
 						int pagegroup=0;
 						while(rs.next()){
@@ -369,6 +369,7 @@ rs=stmt.executeQuery(query);
 								<button class="btn btn-info float-right" type="reset" style="margin-right: 5px;" onclick="resetbutton()">초기화</button>
 								<script>
 								 function insert_part(frm){
+									 
 										var filecheck = document.getElementById("item_img").value;
 										if(!filecheck){
 											frm.action = 'insert.jsp';
@@ -403,6 +404,7 @@ rs=stmt.executeQuery(query);
 								}
 								</script>
 								
+								<!-- 발주 관련 모달창 -->
 								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								  <div class="modal-dialog" style="max-width: 100%; width: auto; display: table;">
 								    <div class="modal-content">
@@ -434,5 +436,11 @@ rs=stmt.executeQuery(query);
 			</div>
 		</div>
 	</div>
+	
+	<%
+	rs.close();
+	stmt.close();
+	conn.close();
+	%>
 </body>
 </html>

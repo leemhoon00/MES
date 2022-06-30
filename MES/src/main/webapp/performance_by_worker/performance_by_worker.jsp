@@ -1,3 +1,5 @@
+<!-- 작업자별 실적 현황 페이지 -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.DriverManager"%>
@@ -11,9 +13,7 @@
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = null;
 	Statement stmt = null;
-	Statement stmt2 = null;
 	ResultSet rs = null;
-	ResultSet rs2 = null;
 	String query= null;
 	
 	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
@@ -61,6 +61,7 @@
 				<select class="form-select search" style="width:10%" id="select">
 					<option value="전체">전체</option>
 					<%
+					//작업자 목록 셀렉트박스의 옵션값으로 넣기
 					while(rs.next()){
 					%>
 					<option value="<%=rs.getString("user_id")%>"><%=rs.getString("user_id")%></option>

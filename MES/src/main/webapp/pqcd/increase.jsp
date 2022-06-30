@@ -1,3 +1,5 @@
+<!-- 설비가동률(증가) -->
+
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 
