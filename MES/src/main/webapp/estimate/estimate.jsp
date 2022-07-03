@@ -84,6 +84,19 @@ $(document).on("keyup", "input[name='net_price']", function(e) {
 	   
 	   $(this).val(comma($(this).val()));
 	});
+	
+	
+$(document).on("keyup", "input[name='ncost']", function(e) {
+	   $(this).val( $(this).val().replace(/[^0-9-]/gi,"") );
+	   
+	   $(this).val(comma($(this).val()));
+	});
+	
+$(document).on("keyup", "input[name='nother_cost']", function(e) {
+	   $(this).val( $(this).val().replace(/[^0-9-]/gi,"") );
+	   
+	   $(this).val(comma($(this).val()));
+	});
 $(function(){
     $("#estitabletbody tr").click(function(){
     	var tr = $(this);
@@ -165,7 +178,7 @@ function searchestimate(){
 			'	<input type="number" id="md" value=' + proc_costresult[i][3].value + ' name="nmd" class="form-control" style="width:60%; margin-top:3px;">'+
 			'</td>';
 			cell5.innerHTML ='<td>'+
-			'	<input type="number" id="cost" value=' + proc_costresult[i][4].value + ' name="ncost" class="form-control" style="width:60%; margin-top:3px;">'+
+			'	<input type="text" id="cost" value=' + comma(proc_costresult[i][4].value) + ' name="ncost" class="form-control" style="width:70%; margin-top:3px;">'+
 			'</td>';
 			cell6.innerHTML ='<td>'+
 			'	<input class="btn btn-danger" type="submit" value="삭제" style="margin-top:3px;" onclick="selectdel(this);">'+
@@ -191,7 +204,7 @@ function searchestimate(){
 			'	<select id="other_et_id' + othercnt + '" value=' + other_costresult[i][0].value + ' name="nother_et_id" class="form-control" style="width: 70%; margin-top:10px;">'+
 			'</td>';
 			cell2.innerHTML ='<td>'+
-			'	<input type="number" id="other_cost" value=' + other_costresult[i][1].value + ' name="nother_cost" class="form-control" style="width:70%; margin-top:3px;">'+
+			'	<input type="text" id="other_cost" value=' + comma(other_costresult[i][1].value) + ' name="nother_cost" class="form-control" style="width:70%; margin-top:3px;">'+
 			'</td>';
 			cell3.innerHTML ='<td>'+
 			'	<input class="btn btn-danger" type="submit" value="삭제" style="margin-top:3px;" onclick="selectdel(this);">'+
@@ -205,14 +218,13 @@ function searchestimate(){
 			othercnt++	;
 		}
 		$(document).ready(function() {
-		    $('select[name="nother_et"]').select2()
+		    $('select[name="nother_et_id"]').select2()
 		});
 	}
 }
 
 function searchet_idevent(dates){
 	var searchword = document.getElementById("searchet_id").value;
-	alert(dates);
 	request.open("Post", "../searchtableajax?searchword=" + searchword  +"&mode=" + mode, true);
 	request.onreadystatechange = searchestimatetable;
 	request.send(null);
@@ -494,7 +506,7 @@ function addrow2(){
 	'	<input type="number" id="md" name="nmd" class="form-control" style="width:60%; margin-top:3px;">'+
 	'</td>';
 	cell5.innerHTML ='<td>'+
-	'	<input type="number" id="cost" name="ncost" class="form-control" style="width:60%; margin-top:3px;">'+
+	'	<input type="text" id="cost" name="ncost" class="form-control" style="width:70%; margin-top:3px;">'+
 	'</td>';
 	cell6.innerHTML ='<td>'+
 	'	<input class="btn btn-danger" type="submit" value="삭제" style="margin-top:3px;" onclick="selectdel(this);">'+
@@ -519,7 +531,7 @@ function addrow3(){
 	'	<select id="other_et_id' + othercnt + '" class="form-control" name="nother_et_id" style="width: 70%; margin-top:10px;">'+
 	'</td>';
 	cell2.innerHTML ='<td>'+
-	'	<input type="number" id="other_cost" name="nother_cost" class="form-control" style="width:70%; margin-top:3px;">'+
+	'	<input type="text" id="other_cost" name="nother_cost" class="form-control" style="width:70%; margin-top:3px;">'+
 	'</td>';
 	cell3.innerHTML ='<td>'+
 	'	<input class="btn btn-danger" type="submit" value="삭제" style="margin-top:3px;" onclick="selectdel(this);">'+
@@ -654,7 +666,6 @@ function deleteform(frm){
 	var et_id = document.getElementById('et_id');
 	var degree = document.getElementById('et_degree');
 	var check = 0;
-	alert(degree.value);
 	if(check == 0 && et_id.value == ""){
 		alert("필수값을 입력하세요.");
 		check = 1;
@@ -828,7 +839,7 @@ public String commaj(int s){
 							<td><%=degreev.get(i).getEt_id()%></td>
 							<td><%=degreev.get(i).getDegree()%></td>
 							<td><%=degreev.get(i).getEt_com_name()%></td>
-							<td><%=commaj(degreev.get(i).getEt_price())%></td>
+							<td><%=degreev.get(i).getEt_price()%></td>
 							<td><%=degreev.get(i).getEt_date()%></td>
 							<td style="display:none;"><%=degreev.get(i).getEt_explain()%></td>
 						</tr>

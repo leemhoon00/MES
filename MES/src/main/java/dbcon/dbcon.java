@@ -14,6 +14,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class dbcon {
 	Connection con = null;
@@ -38,7 +41,16 @@ public class dbcon {
 			e.printStackTrace();
 		}
 	}
-
+	public String commaj(int s){
+		DecimalFormat df = new DecimalFormat("###,###");
+		String money = df.format(s);
+		return money;
+	}
+	
+	public String uncomma(String s) {
+		s = s.replace(",", "");
+		return s;
+	}
 	public Vector<estimatedb> estimatetable() {
 		Vector<estimatedb> v = new Vector<estimatedb>();
 		try {
@@ -51,7 +63,7 @@ public class dbcon {
 				es.setEt_id(rs.getString("et_id"));
 				es.setDegree(rs.getInt("degree"));
 				es.setEt_com_name(rs.getString("et_com_id"));
-				es.setEt_price(rs.getInt("et_price"));
+				es.setEt_price(commaj(rs.getInt("et_price")));
 				es.setEt_date(rs.getString("et_date").substring(0, 10));
 				String et_explain = rs.getString("et_explain");
 				et_explain = et_explain.replace("\r\n", "!@#");
@@ -85,7 +97,7 @@ public class dbcon {
 					es.setEt_id(rs.getString("et_id"));
 					es.setDegree(rs.getInt("degree"));
 					es.setEt_com_name(rs.getString("et_com_id"));
-					es.setEt_price(rs.getInt("et_price"));
+					es.setEt_price(commaj(rs.getInt("et_price")));
 					es.setEt_date(rs.getString("et_date").substring(0, 10));
 					String et_explain = rs.getString("et_explain");
 					et_explain = et_explain.replace("\r\n", "!@#");
@@ -105,7 +117,7 @@ public class dbcon {
 					es.setEt_id(rs.getString("et_id"));
 					es.setDegree(rs.getInt("degree"));
 					es.setEt_com_name(rs.getString("et_com_id"));
-					es.setEt_price(rs.getInt("et_price"));
+					es.setEt_price(commaj(rs.getInt("et_price")));
 					es.setEt_date(rs.getString("et_date").substring(0, 10));
 					String et_explain = rs.getString("et_explain");
 					et_explain = et_explain.replace("\r\n", "!@#");
@@ -138,7 +150,7 @@ public class dbcon {
 					es.setEt_id(rs.getString("et_id"));
 					es.setDegree(rs.getInt("max(degree)"));
 					es.setEt_com_name(rs.getString("et_com_id"));
-					es.setEt_price(rs.getInt("et_price"));
+					es.setEt_price(commaj(rs.getInt("et_price")));
 					es.setEt_date(rs.getString("et_date").substring(0, 10));
 					String et_explain = rs.getString("et_explain");
 					et_explain = et_explain.replace("\r\n", "!@#");
@@ -158,7 +170,7 @@ public class dbcon {
 					es.setEt_id(rs.getString("et_id"));
 					es.setDegree(rs.getInt("max(degree)"));
 					es.setEt_com_name(rs.getString("et_com_id"));
-					es.setEt_price(rs.getInt("et_price"));
+					es.setEt_price(commaj(rs.getInt("et_price")));
 					es.setEt_date(rs.getString("et_date").substring(0, 10));
 					String et_explain = rs.getString("et_explain");
 					et_explain = et_explain.replace("\r\n", "!@#");
@@ -241,7 +253,7 @@ public class dbcon {
 					pstmt.setString(4, et_start[i]);
 					pstmt.setString(5, et_end[i]);
 					pstmt.setString(6, md[i]);
-					pstmt.setString(7, cost[i]);
+					pstmt.setString(7, uncomma(cost[i]));
 					pstmt.executeUpdate();
 				}
 				pstmt.close();
@@ -262,7 +274,8 @@ public class dbcon {
 				pstmt.setInt(2, degree);
 				for (int i = 0; i < other_et_id.length; i++) {
 					pstmt.setString(3, other_et_id[i]);
-					pstmt.setString(4, othercost[i]);
+					System.out.println(uncomma(othercost[i]));
+					pstmt.setString(4, uncomma(othercost[i]));
 					pstmt.executeUpdate();
 				}
 				pstmt.close();
@@ -466,7 +479,7 @@ public class dbcon {
 				es.setEt_id(rs.getString("et_id"));
 				es.setDegree(rs.getInt("max(degree)"));
 				es.setEt_com_name(rs.getString("et_com_id"));
-				es.setEt_price(rs.getInt("et_price"));
+				es.setEt_price(commaj(rs.getInt("et_price")));
 				es.setEt_date(rs.getString("et_date").substring(0, 10));
 				String et_explain = rs.getString("et_explain");
 				et_explain = et_explain.replace("\r\n", "!@#");
