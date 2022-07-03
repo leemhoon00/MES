@@ -340,13 +340,19 @@ rs=stmt.executeQuery(query);
 						sel1.appendChild(option);
 					}
 					
+					
+					/*
 					var sel2 = tr1.children[2].children[0];
+					
 					for(i=0;i<processname.length;i++){
 						var option = document.createElement("option");
 						option.text = processname[i];
 						option.value = processname[i];
 						sel2.appendChild(option);
 					}
+					
+					*/
+					
 					
 				}
 				
@@ -362,6 +368,20 @@ rs=stmt.executeQuery(query);
 			            dataType:"html",
 			            success:function(data){
 			                $(element.parentNode.parentNode.children[1].children[0]).html(data);
+			          }
+			       });
+				}
+				
+				//부품이 바꼈을 때 공정의 셀렉트박스의 옵션값 업데이트
+				function partchange(element){
+					var p1 = element.value;
+					$.ajax({
+						type:"GET",
+			            url:"./process_ajax.jsp",
+			            data:{part:p1},
+			            dataType:"html",
+			            success:function(data){
+			                $(element.parentNode.parentNode.children[2].children[0]).html(data);
 			          }
 			       });
 				}
@@ -417,7 +437,7 @@ rs=stmt.executeQuery(query);
 					</td>
 					
 					<td>
-						<select class="form-select" name="part_name">
+						<select class="form-select" name="part_name" onchange="partchange(this)">
 							<option value="">--선택--</option>
 						</select>
 					</td>

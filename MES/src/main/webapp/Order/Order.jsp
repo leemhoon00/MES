@@ -317,6 +317,11 @@
                      
                      <script>
                      <!-- 수주관리 삭제버튼에 따른 이벤트 함수 -->
+                     function uncomma(str) {
+                    	    str = String(str);
+                    	    return str.replace(/[^\d]+/g, '');
+                    	}
+                     
                      function insert_order(frm){
                     	 let op=$("#order_price").val();
                     	 $("#order_price").val(uncomma(op));
@@ -375,6 +380,13 @@
                      <!-- 납기취소 버튼에 따른 이벤트 함수 -->
                      $(document).on("click","#noperiod",function(){
                         $("#due_date").val(null);
+                        var temp = document.getElementById("order_price").value;
+                        temp = uncomma(temp);
+                        document.getElementById("order_price").value = temp;
+                        
+                        temp = document.getElementById("nego_price").value;
+                        temp = uncomma(temp);
+                        document.getElementById("nego_price").value = temp;
                         $("form").submit();
                      });
                      
