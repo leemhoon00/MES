@@ -2,25 +2,10 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 <!DOCTYPE html>
 <html>
@@ -45,7 +30,7 @@
 </head>
 <body>
 <%
-
+	String query;
 	String temp="";
 
 	int rowcount=0;
@@ -60,8 +45,8 @@
 	}
 	
 	//페이지네이션 관련
-	rs=stmt.executeQuery(query);
-	if(rs.next()){rowcount=rs.getInt(1);}
+	db.rs=db.stmt.executeQuery(query);
+	if(db.rs.next()){rowcount=db.rs.getInt(1);}
 	int lastpagenumber=1;
 	if(rowcount != 0){
 		lastpagenumber = (rowcount-1)/10 +1;
@@ -74,7 +59,7 @@
 		query = "select * from mes.order where item_no like '%"+order+"%'";
 	}
 	
-	rs=stmt.executeQuery(query);
+	db.rs=db.stmt.executeQuery(query);
 %>
 <script>
 var selectedorder="";
@@ -99,19 +84,19 @@ var selectedorder="";
 					<%
 					int count=0;
 					int pagegroup=0;
-					while(rs.next()){
+					while(db.rs.next()){
 						count++;
 						if(count % 10 ==1){
 							pagegroup++;
 						}
-						temp = rs.getString("item_no");
+						temp = db.rs.getString("item_no");
 						
 					%>
 					<tr class="trs pagegroup<%=pagegroup%>" id="<%=temp%>" onclick="tableclickevent(this)">
-						<td><%=rs.getString("item_no")%></td>
-						<td><%=rs.getString("car_name")%></td>
-						<td><%=rs.getString("order_com_id")%></td>
-						<td><%=rs.getString("order_date").substring(0,10)%></td>
+						<td><%=db.rs.getString("item_no")%></td>
+						<td><%=db.rs.getString("car_name")%></td>
+						<td><%=db.rs.getString("order_com_id")%></td>
+						<td><%=db.rs.getString("order_date").substring(0,10)%></td>
 						
 					</tr>
 					<%
@@ -228,7 +213,7 @@ var selectedorder="";
 </body>
 </html>
 <%
-rs.close();
-stmt.close();
-conn.close();
+db.rs.close();
+db.stmt.close();
+db.conn.close();
 %>

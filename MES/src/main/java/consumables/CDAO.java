@@ -38,6 +38,7 @@ public class CDAO {
 		}
 	}
 	
+	
 	//소재구분 서브코드명 가져오기
 	public ArrayList<String> getSub(){
 		ArrayList<String> list = new ArrayList<String>();

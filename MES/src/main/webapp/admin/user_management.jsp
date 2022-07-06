@@ -2,25 +2,14 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
+<%@ page import="jh.jhdbconn"%>
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
+
+jhdbconn db = new jhdbconn();
 	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	
 %>
 
 <%
@@ -28,9 +17,9 @@ String temp="";
 
 //rowcount = row갯수 (페이지네이션 용)
 int rowcount=0;
-query="select count(*) from user";
-rs=stmt.executeQuery(query);
-if(rs.next()){rowcount=rs.getInt(1);}
+db.query="select count(*) from user";
+db.rs=db.stmt.executeQuery(db.query);
+if(db.rs.next()){rowcount=db.rs.getInt(1);}
 
 //lastpagenumber : 페이지네이션 용 마지막페이지
 int lastpagenumber=1;
@@ -39,8 +28,8 @@ if(rowcount != 0){
 }
 %>
 <%
-query = "select * from user";
-rs=stmt.executeQuery(query);
+db.query = "select * from user";
+db.rs=db.stmt.executeQuery(db.query);
 %>
 
 <!DOCTYPE html>
@@ -170,14 +159,14 @@ rs=stmt.executeQuery(query);
 						int count=0;
 						int pagegroup=0;
 						
-						while(rs.next()){
+						while(db.rs.next()){
 							count++;
 							if(count % 10 ==1){
 								pagegroup++;
 							}
-							temp = rs.getString("user_name");
+							temp = db.rs.getString("user_name");
 							String YN="";
-							if(rs.getString("use_yn").equals("0")){
+							if(db.rs.getString("use_yn").equals("0")){
 								YN="N";
 							}
 							else{
@@ -185,19 +174,19 @@ rs=stmt.executeQuery(query);
 							}
 						%>
 						<tr class="trs pagegroup<%=pagegroup%>" id="<%=temp%>" onclick="tableclickevent(this)">
-							<td><%=rs.getString("user_id")%></td>
-							<td style="display:none"><%=rs.getString("user_pw")%></td>
-							<td><%=rs.getString("user_name")%></td>
-							<td><%=rs.getString("email")%></td>
-							<td><%=rs.getString("phone")%></td>
-							<td><%=rs.getString("first_position")%></td>
+							<td><%=db.rs.getString("user_id")%></td>
+							<td style="display:none"><%=db.rs.getString("user_pw")%></td>
+							<td><%=db.rs.getString("user_name")%></td>
+							<td><%=db.rs.getString("email")%></td>
+							<td><%=db.rs.getString("phone")%></td>
+							<td><%=db.rs.getString("first_position")%></td>
 							<td><%=YN%></td>
-							<td style="display:none"><%=rs.getString("second_position")%></td>
-							<td style="display:none"><%=rs.getString("third_position")%></td>
-							<td style="display:none"><%=rs.getString("note")%></td>
-							<td style="display:none"><%=rs.getString("state")%></td>
-							<td style="display:none"><%=rs.getString("use_yn")%></td>
-							<td><button type="button" class="btn btn-secondary" onclick="location.href='/MES/barcode/barcode.jsp?code=71&uniqueId=<%=rs.getString("b_num")%>'">인쇄</button></td>
+							<td style="display:none"><%=db.rs.getString("second_position")%></td>
+							<td style="display:none"><%=db.rs.getString("third_position")%></td>
+							<td style="display:none"><%=db.rs.getString("note")%></td>
+							<td style="display:none"><%=db.rs.getString("state")%></td>
+							<td style="display:none"><%=db.rs.getString("use_yn")%></td>
+							<td><button type="button" class="btn btn-secondary" onclick="location.href='/MES/barcode/barcode.jsp?code=71&uniqueId=<%=db.rs.getString("b_num")%>'">인쇄</button></td>
 						</tr>
 						<%
 						}
@@ -406,9 +395,9 @@ rs=stmt.executeQuery(query);
 		</div>
 	</div>
 	<%
-	rs.close();
-	stmt.close();
-	conn.close();
+	db.rs.close();
+	db.stmt.close();
+	db.conn.close();
 	%>
 </body>
 </html>

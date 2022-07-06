@@ -2,14 +2,10 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
 <%@ page import="java.text.ParseException"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
+<%@ page import="jh.jhdbconn"%>
 
 <!DOCTYPE html>
 <html>
@@ -35,17 +31,8 @@
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	String query;
+	jhdbconn db = new jhdbconn();
 	
 	String date1 = request.getParameter("date1");
 	String date2 = request.getParameter("date2");
@@ -62,17 +49,17 @@
 	d1 = sdf.parse(date1+" 00:00:00");
 	d2 = sdf.parse(date2+" 23:59:59");
 	query = "select count(*) from facilities";
-	rs=stmt.executeQuery(query);
+	db.rs=db.stmt.executeQuery(query);
 	
 	int facilitycount =0;
-	if(rs.next()){facilitycount = rs.getInt(1);}
+	if(db.rs.next()){facilitycount = db.rs.getInt(1);}
 	query = "select * from facilities";
-	rs=stmt.executeQuery(query);
+	db.rs=db.stmt.executeQuery(query);
 	String[] facilityname = new String[facilitycount];
 	
 	int i=0;
-	while(rs.next()){
-		facilityname[i] = rs.getString("facilities_name");
+	while(db.rs.next()){
+		facilityname[i] = db.rs.getString("facilities_name");
 		i++;
 	}
 	i=0;
@@ -93,26 +80,26 @@
 		double ontimeday=0;
 		double offtimeday=0;
 		query = "select count(*) from facility_time where facility_name='"+facilityname[i]+"' and DATE(f_time) between '"+date1+"' and '"+date2+"'";
-		rs=stmt.executeQuery(query);
-		if(rs.next()){
-			if(rs.getInt(1)==0){
+		db.rs=db.stmt.executeQuery(query);
+		if(db.rs.next()){
+			if(db.rs.getInt(1)==0){
 				totaltemp=-1;
 			}
 			else{
-				totaltemp = rs.getInt(1);
+				totaltemp = db.rs.getInt(1);
 			}
 			
 		}
 		query = "select * from facility_time where facility_name='"+facilityname[i]+"' and DATE(f_time) between '"+date1+"' and '"+date2+"'";
-		rs=stmt.executeQuery(query);
+		db.rs=db.stmt.executeQuery(query);
 		int temp=0;
 		long ontimesecond=0;
 		String previous="";
 		if(totaltemp == -1){
 			query = "select * from facility_time where facility_name='"+facilityname[i]+"' order by num desc limit 1";
-			rs=stmt.executeQuery(query);
-			if(rs.next()){
-				if(rs.getString("status").equals("가동")){
+			db.rs=db.stmt.executeQuery(query);
+			if(db.rs.next()){
+				if(db.rs.getString("status").equals("가동")){
 					ontimeday = totalday;
 					offtimeday=0;
 					
@@ -124,26 +111,26 @@
 			}
 		}
 		else{
-			while(rs.next()){
+			while(db.rs.next()){
 				if(temp==0){
-					if(rs.getString("status").equals("비가동")){
-						ontimesecond += (sdf.parse(rs.getString("f_time")).getTime() - d1.getTime()) / (1000);
+					if(db.rs.getString("status").equals("비가동")){
+						ontimesecond += (sdf.parse(db.rs.getString("f_time")).getTime() - d1.getTime()) / (1000);
 					}
 					else{
-						previous = rs.getString("f_time");
+						previous = db.rs.getString("f_time");
 					}
 					temp++;
 				}
 				else{
-					if(rs.getString("status").equals("비가동")){
-						ontimesecond += (sdf.parse(rs.getString("f_time")).getTime() - sdf.parse(previous).getTime()) / (1000);
+					if(db.rs.getString("status").equals("비가동")){
+						ontimesecond += (sdf.parse(db.rs.getString("f_time")).getTime() - sdf.parse(previous).getTime()) / (1000);
 					}
 					else{
 						if((temp+1)==totaltemp){
-							ontimesecond += (d2.getTime() - sdf.parse(rs.getString("f_time")).getTime()) / 1000;
+							ontimesecond += (d2.getTime() - sdf.parse(db.rs.getString("f_time")).getTime()) / 1000;
 						}
 						else{
-							previous = rs.getString("f_time");
+							previous = db.rs.getString("f_time");
 						}
 						
 					}
@@ -254,9 +241,9 @@ array[<%=i%>][<%=j%>] = '<%=array[i][j]%>';
 	</div>
 	
 	<%
-	rs.close();
-	stmt.close();
-	conn.close();
+	db.rs.close();
+	db.stmt.close();
+	db.conn.close();
 	%>
 </body>
 </html>

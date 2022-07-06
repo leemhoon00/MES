@@ -2,25 +2,10 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 
 <!DOCTYPE html>
@@ -47,6 +32,7 @@
 <body>
 <%
 
+	String query;
 	String temp="";
 
 	int rowcount=0;
@@ -59,8 +45,8 @@
 	}
 	
 	//페이지네이션 관련
-	rs=stmt.executeQuery(query);
-	if(rs.next()){rowcount=rs.getInt(1);}
+	db.rs=db.stmt.executeQuery(query);
+	if(db.rs.next()){rowcount=db.rs.getInt(1);}
 	int lastpagenumber=1;
 	if(rowcount != 0){
 		lastpagenumber = (rowcount-1)/10 +1;
@@ -73,7 +59,7 @@
 		query = "select * from parts_by_order where parts_by_order.order = '"+order+"'";
 	}
 	
-	rs=stmt.executeQuery(query);
+	db.rs=db.stmt.executeQuery(query);
 %>
 <script>
 var selected="";
@@ -94,17 +80,17 @@ var selected="";
 			<%
 			int count=0;
 			int pagegroup=0;
-			while(rs.next()){
+			while(db.rs.next()){
 				count++;
 				if(count % 10 ==1){
 					pagegroup++;
 				}
-				temp = rs.getString("part");
+				temp = db.rs.getString("part");
 				
 			%>
 			<tr class="trs2 pagegroup2<%=pagegroup%>" id="<%=temp%>" onclick="tableclickevent2(this)">
-				<td><%=rs.getString("part")%></td>
-				<td><%=rs.getInt("quantity")%></td>
+				<td><%=db.rs.getString("part")%></td>
+				<td><%=db.rs.getInt("quantity")%></td>
 			</tr>
 			<%
 			}
@@ -206,7 +192,7 @@ var selected="";
 </body>
 </html>
 <%
-rs.close();
-stmt.close();
-conn.close();
+db.rs.close();
+db.stmt.close();
+db.conn.close();
 %>

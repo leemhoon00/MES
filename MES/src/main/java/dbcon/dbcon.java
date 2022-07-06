@@ -938,6 +938,32 @@ public class dbcon {
 		}
 	}
 	
+	//pminsert
+	public void pminsertplace_order(String[] partname, String[] type, String[] nor, String com, String place, String[] price, String note){		
+		try {
+			dbconnect();
+			String sql = "insert into place_order(part_name, type, "
+					+ "number_of_request, porder_company, p_date, receiving_day, receiving_status, place_of_delivery, unit_price, note) values"
+					+ "(?, ?, ?, ?, sysdate(), null, 'N', ?, ?, ?)";
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			for(int i=0; i<partname.length; i++) {
+				pstmt.setString(1, partname[i]);
+				pstmt.setString(2, type[i]);
+				pstmt.setString(3, nor[i]);
+				pstmt.setString(4, com);
+				pstmt.setString(5, place);
+				pstmt.setInt(6, Integer.parseInt(price[i]));
+				pstmt.setString(7, note);
+				pstmt.executeUpdate();
+			}
+			pstmt.close();
+			con.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void deletemanage_porder(String[] m_no) {
 		try {
 			dbconnect();

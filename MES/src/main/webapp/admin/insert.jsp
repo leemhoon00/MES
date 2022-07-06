@@ -2,25 +2,12 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
+    <%@ page import="jh.jhdbconn"%>
 
 
 <!-- 데이터베이스 연결 -->
 <%
-Class.forName("com.mysql.jdbc.Driver");
-Connection conn = null;
-Statement stmt = null;
-String query= null;
-
-String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-String dbUser = "Usera";
-String dbPass = "1234";
-conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-stmt = conn.createStatement();
+jhdbconn db = new jhdbconn();
 %>
 
 
@@ -53,23 +40,23 @@ if(user_id.equals("")){
 else{
 	if(submitcheck.equals("1")){
 		
-		query = "update user set user_pw='"+user_pw+"', user_name='"+user_name+"',first_position='"+first_position+"',second_position='"+second_position+"',third_position='"+third_position+"',phone='"+phone+"',email='"+email+"',note='"+note+"',state='"+state+"',use_yn='"+use_yn+"' where user_id='"+user_id+"'";
+		db.query = "update user set user_pw='"+user_pw+"', user_name='"+user_name+"',first_position='"+first_position+"',second_position='"+second_position+"',third_position='"+third_position+"',phone='"+phone+"',email='"+email+"',note='"+note+"',state='"+state+"',use_yn='"+use_yn+"' where user_id='"+user_id+"'";
 	}
 	else{
-		query = "insert into user (user_id,user_pw,user_name,first_position,second_position,third_position,phone,email,note,state,use_yn,barcode,service) values('"+user_id+"','"+user_pw+"','"+user_name+"','"+first_position+"','"+second_position+"','"+third_position+"','"+phone+"','"+email+"','"+note+"','"+state+"','"+use_yn+"','',null)";
+		db.query = "insert into user (user_id,user_pw,user_name,first_position,second_position,third_position,phone,email,note,state,use_yn,barcode,service) values('"+user_id+"','"+user_pw+"','"+user_name+"','"+first_position+"','"+second_position+"','"+third_position+"','"+phone+"','"+email+"','"+note+"','"+state+"','"+use_yn+"','',null)";
 	}
 	
 	try{
-		stmt.executeUpdate(query);
+		db.stmt.executeUpdate(db.query);
 		response.sendRedirect("user_management.jsp");
 	}catch(Exception e){
 		out.println("<script>alert('이미있는 사용자ID 입니다.');document.location.href='user_management.jsp';</script>");
-		System.out.println(e);
+		
 	}
 	
 }
-stmt.close();
-conn.close();
+db.stmt.close();
+db.conn.close();
 %>
 </body>
 </html>

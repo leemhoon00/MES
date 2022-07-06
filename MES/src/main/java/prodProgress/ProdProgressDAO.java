@@ -632,6 +632,9 @@ public class ProdProgressDAO {
 				String delsql = "delete from manage_porder where part_name = ? and order_name = ?";
 				con = db.getCon();
 				pstmt = con.prepareStatement(sql);
+				
+				
+				
 				pstmt.setInt(1, dto.getPorder_no());
 				pstmt.setString(2, dto.getPart_name());
 				pstmt.setString(3, dto.getType());
@@ -655,6 +658,7 @@ public class ProdProgressDAO {
 				pstmt.executeUpdate();
 				pstmt.close();
 			}catch(Exception e) {
+				
 				e.printStackTrace();
 			}finally {
 				db.close();
@@ -675,12 +679,14 @@ public class ProdProgressDAO {
 				
 				if(rs.next()) {
 					next = rs.getInt("porder_no") + 1;
+					
 				}
 				
 				rs.close();
 				stmt.close();
 			}catch(Exception e) {
 				e.printStackTrace();
+				
 			}finally {
 				db.close();
 			}

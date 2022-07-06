@@ -19,6 +19,7 @@
 	String[] n_mo = request.getParameterValues("nm_no");
 	String[] ordername = request.getParameterValues("norder_name");
 	
+	System.out.println("terst");
 	dbc.insertplace_order(partname, type, nor, ordercom, place, price, note, n_mo, ordername);
 	PrintWriter script = response.getWriter();
 	script.println("<script>");

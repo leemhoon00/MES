@@ -2,28 +2,15 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
 <%@ page import="java.text.ParseException"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
+<%@ page import="jh.jhdbconn"%>
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
+	String query;
 	
 	
 	String date1 = request.getParameter("date1");
@@ -56,11 +43,11 @@
 <%
 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 query = "select count(*) from mes.order where order_date between '"+date1+"' and '"+date2+"'";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 
 int count = 0;
-if(rs.next()){
-	count=rs.getInt(1);
+if(db.rs.next()){
+	count=db.rs.getInt(1);
 }
 
 String [][] array = new String[count+1][2];
@@ -72,18 +59,18 @@ array2[0][0] = "";
 array2[0][1] = "납기준수일";
 
 query = "select * from mes.order where order_date between '"+date1+"' and '"+date2+"'";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 
 int i=1;
-while(rs.next()){
-	array[i][0] = rs.getString("item_no");
-	array2[i][0] = rs.getString("item_no");
-	if(rs.getString("del_date")==null || rs.getString("del_date").equals("NULL")){
+while(db.rs.next()){
+	array[i][0] = db.rs.getString("item_no");
+	array2[i][0] = db.rs.getString("item_no");
+	if(db.rs.getString("del_date")==null || db.rs.getString("del_date").equals("NULL")){
 		array[i][1] = "X";
 		array2[i][1] = "0";
 	}
-	else if(rs.getString("due_date")==null || rs.getString("due_date").equals("NULL")){
-		Date FirstDate = format.parse(rs.getString("del_date").substring(0,10));
+	else if(db.rs.getString("due_date")==null || db.rs.getString("due_date").equals("NULL")){
+		Date FirstDate = format.parse(db.rs.getString("del_date").substring(0,10));
 		Date now = new Date();
 		Date SecondDate = format.parse(format.format(now));
 		
@@ -99,8 +86,8 @@ while(rs.next()){
 		
 	}
 	else{
-		Date FirstDate = format.parse(rs.getString("del_date").substring(0,10));
-		Date SecondDate = format.parse(rs.getString("due_date").substring(0,10));
+		Date FirstDate = format.parse(db.rs.getString("del_date").substring(0,10));
+		Date SecondDate = format.parse(db.rs.getString("due_date").substring(0,10));
 		
 		long diffDays = (FirstDate.getTime() - SecondDate.getTime()) / (1000*60*60*24);
 		array[i][1] = String.valueOf(diffDays);
@@ -180,16 +167,16 @@ while(rs.next()){
 				<tbody>
 				<%
 				query = "select * from mes.order where order_date between '"+date1+"' and '"+date2+"'";
-				rs=stmt.executeQuery(query);
+				db.rs=db.stmt.executeQuery(query);
 				
 				i=1;
-				while(rs.next()){
+				while(db.rs.next()){
 				%>
 				<tr>
-					<th><%=rs.getString("item_no") %></th>
+					<th><%=db.rs.getString("item_no") %></th>
 					<th><%=array[i][1] %></th>
-					<th><%=rs.getString("del_date")==null ? "" : rs.getString("del_date").substring(0,10) %></th>
-					<th><%=rs.getString("due_date")==null ? "" : rs.getString("due_date").substring(0,10) %></th>
+					<th><%=db.rs.getString("del_date")==null ? "" : db.rs.getString("del_date").substring(0,10) %></th>
+					<th><%=db.rs.getString("due_date")==null ? "" : db.rs.getString("due_date").substring(0,10) %></th>
 				</tr>
 				
 				<% i++; } %>

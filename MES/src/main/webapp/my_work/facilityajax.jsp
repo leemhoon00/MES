@@ -2,26 +2,11 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
 	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
-	
+	jhdbconn db = new jhdbconn();
 %>
 
 <!DOCTYPE html>
@@ -33,18 +18,18 @@
 <body>
 <%
 String process = request.getParameter("process");
-query = "select * from process_multi where proc_name='"+process+"' and sortation='f'";
-rs=stmt.executeQuery(query);
+String query = "select * from process_multi where proc_name='"+process+"' and sortation='f'";
+db.rs=db.stmt.executeQuery(query);
 %>
 <option value="">--선택--</option>
 <%
-while(rs.next()){
+while(db.rs.next()){
 %>
-<option value="<%=rs.getString("sub_proc")%>"><%=rs.getString("sub_proc")%></option>
+<option value="<%=db.rs.getString("sub_proc")%>"><%=db.rs.getString("sub_proc")%></option>
 <%} 
-rs.close();
-stmt.close();
-conn.close();
+db.rs.close();
+db.stmt.close();
+db.conn.close();
 %>
 </body>
 </html>

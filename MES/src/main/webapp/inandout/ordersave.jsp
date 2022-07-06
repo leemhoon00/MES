@@ -2,25 +2,10 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 <!DOCTYPE html>
 <html>
@@ -33,14 +18,20 @@
 String p1 = request.getParameter("p1");
 String p2 = request.getParameter("p2");
 
-query = "update place_order set receiving_day = '"+p2+"', receiving_status='Y' where porder_no = "+p1;
-stmt = conn.createStatement();
-stmt.executeUpdate(query);
+if(p2.equals("") || p2==null){
+	out.println("<script>alert('날짜를 입력하시오');document.location.href='inandout.jsp';</script>");
+}
+else{
+	String query = "update place_order set receiving_day = '"+p2+"', receiving_status='Y' where porder_no = "+p1;
+	db.stmt = db.conn.createStatement();
+	db.stmt.executeUpdate(query);
 
-stmt.close();
-conn.close();
+	db.stmt.close();
+	db.conn.close();
 
-response.sendRedirect("inandout.jsp");
+	response.sendRedirect("inandout.jsp");
+}
+
 %>
 
 </body>

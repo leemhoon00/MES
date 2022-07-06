@@ -283,7 +283,7 @@
                         </div>
                         <div class="form-group dueday">
                            <label for="order_dueday">납기완료일</label>
-                           <input type="text" id="due_date" class="form-control" name="dueday" readonly>
+                           <input type="date" id="due_date" class="form-control" name="dueday">
                         </div>
                      </td>
                   </tr>
@@ -373,7 +373,10 @@
                     	 $("#order_price").val(uncomma(op));
                     	 let np=$("#nego_price").val();
                     	 $("#nego_price").val(uncomma(np));
-                        $("#due_date").val(dateFormat(new Date()));
+                    	 if(document.getElementById("due_date").value==""){
+                    		 $("#due_date").val(dateFormat(new Date()));
+                    	 }
+                        // $("#due_date").val(dateFormat(new Date()));
                         $("form").submit();
                      });
                      

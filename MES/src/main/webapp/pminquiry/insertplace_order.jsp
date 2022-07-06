@@ -14,7 +14,7 @@
 	String place = request.getParameter("nplace");
 	String note = request.getParameter("nnote");
 	
-	dbc.insertplace_order(partname, type, nor, ordercom, place, price, note);
+	dbc.pminsertplace_order(partname, type, nor, ordercom, place, price, note);
 	PrintWriter script = response.getWriter();
 	script.println("<script>");
 	script.println("alert('성공');");

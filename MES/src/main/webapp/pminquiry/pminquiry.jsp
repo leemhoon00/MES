@@ -271,7 +271,7 @@ int lastpage = (pm.size() - 1) / 10 + 1;
 </script>
 </head>
 <body>
-	<div class="title">발주입고 관리/발주 관리</div>
+	<div class="title">자재현황조회</div>
 	<div class="panel panel-default border searchbox">
 		<div class="panel-body">
 			유형:&nbsp;<select id="searchtype" name="nsearchtype"
@@ -320,6 +320,7 @@ int lastpage = (pm.size() - 1) / 10 + 1;
 					</thead>
 					<tbody id="pmtbody">
 						<%
+						System.out.println(pm.get(0).getStock());
 						for (int i = 0; i < pm.size(); i++) {
 							int pageid = i / 10 + 1;
 							int stock = Integer.parseInt(pm.get(i).getStock());

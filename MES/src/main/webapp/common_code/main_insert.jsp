@@ -2,23 +2,11 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
+    <%@ page import="jh.jhdbconn"%>
 
 <!-- 데이터베이스 연결 -->
 <%
-Class.forName("com.mysql.jdbc.Driver");
-Connection conn = null;
-Statement stmt = null;
-String query= null;
-
-String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-String dbUser = "Usera";
-String dbPass = "1234";
-conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
+jhdbconn db = new jhdbconn();
 %>
 
 <!DOCTYPE html>
@@ -41,17 +29,17 @@ if(txtmaingroup.equals("") || txtmainmain.equals("")){
 }
 else{
 	
-	query = "insert into code_main values('"+txtmaingroup+"','"+txtmainmain+"',"+mainusing+",'"+maincontents+"')";
+	db.query = "insert into code_main values('"+txtmaingroup+"','"+txtmainmain+"',"+mainusing+",'"+maincontents+"')";
 
 	try{
-		stmt = conn.createStatement();
-		stmt.executeUpdate(query);
+		db.stmt = db.conn.createStatement();
+		db.stmt.executeUpdate(db.query);
 		response.sendRedirect("common_code.jsp");
 	}catch(Exception e){
 		out.println("<script>alert('이미있는 메인코드 입니다.');document.location.href='common_code.jsp';</script>");
 	}finally{
-		stmt.close();
-		conn.close();
+		db.stmt.close();
+		db.conn.close();
 	}
 	
 }

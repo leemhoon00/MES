@@ -102,6 +102,7 @@
 
                 <div class="panel-body">
                     <form method="post" id="insertpcform">
+                    	<input type="text" style="display:none" id="dnprocess_name">
                         <table id="insertpceqinputbody">
                             <tr>
                                 <td>
@@ -253,6 +254,7 @@
                                         <input class="btn btn-default" id="selpcchargeinsertbtn" type="button" value="담당자 등록"/>
                                         <input class="btn btn-primary" id="selpcinsertbtn" type="button" value="동일레벨등록"/>
                                         <input class="btn btn-primary" id="selpcdownlevelinsertbtn" type="button" value="하위레벨등록"/>
+                                        <input class="btn btn-primary" id="updatebutton" type="button" value="수정"/>
                                         <input class="btn btn-danger" id="selpcdeletebtn" type="button" value="삭제"/>
                                         <input type="button" data-target="#inchargemodal" data-toggle="modal" id="modaltogglebtn" style="display: none;"/>
                                     </div>
@@ -633,6 +635,43 @@
 						tsetting();
 						$('form').each(function(){this.reset();});
 						$(".selectlist").val(null).select2();
+					}
+					else{
+						alert("실패하였습니다");
+					}
+				},
+				error:function(){
+					alert("error");
+				}
+			});
+        });
+        
+        $("#updatebutton").on("click",function(){ //수정
+        	
+        	
+        	var p1 = document.getElementById("dnprocess_name").value;
+        	var p2 = document.getElementById("selpcpnameinput").value;
+        	var p3 = document.getElementById("selpcfreratesinput").value;
+        	var p4 = document.getElementById("selpcloadfacinput").value;
+        	var p5 = document.getElementById("selpcusingselect").value;
+        	
+        	$.ajax({
+				type:"POST",
+				url:"./standardProcessupdate.jsp",
+				data: {p1:p1, p2:p2, p3:p3, p4:p4, p5:p5},
+				dataType:"html",
+				success:function(data){
+			
+					var d = JSON.parse(data);
+					
+					if(d.result == 1){
+						alert("저장되었습니다");
+						tsetting();
+						$('form').each(function(){this.reset();});
+						$("#selpcinchargeselect").html(null);
+						$(".selectlist").val(null).select2();
+						
+						$("#inchargemodal .close").click();
 					}
 					else{
 						alert("실패하였습니다");

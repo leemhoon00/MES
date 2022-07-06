@@ -2,25 +2,11 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
+String query;
 %>
 
 <%
@@ -30,8 +16,8 @@ String temp="";
 //rowcount = row갯수
 int rowcount=0;
 query="select count(*) from part";
-rs=stmt.executeQuery(query);
-if(rs.next()){rowcount=rs.getInt(1);}
+db.rs=db.stmt.executeQuery(query);
+if(db.rs.next()){rowcount=db.rs.getInt(1);}
 int lastpagenumber=1;
 if(rowcount != 0){
 	lastpagenumber = (rowcount-1)/10 +1;
@@ -39,7 +25,7 @@ if(rowcount != 0){
 %>
 <%
 query = "select * from part";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 %>
 
 <!DOCTYPE html>
@@ -169,24 +155,24 @@ rs=stmt.executeQuery(query);
 						//페이지네이션 관련 변수
 						int count=0;
 						int pagegroup=0;
-						while(rs.next()){
+						while(db.rs.next()){
 							count++;
 							if(count % 10 ==1){
 								pagegroup++;
 							}
-							temp = rs.getString("part_name");
+							temp = db.rs.getString("part_name");
 						%>
 						<tr class="trs pagegroup<%=pagegroup%>" id="<%=temp%>" onclick="tableclickevent(this)">
-							<td><%=rs.getString("part_type")%></td>
-							<td style="display:none"><%=rs.getString("core")%></td>
-							<td><%=rs.getString("part_name")%></td>
-							<td><%=rs.getString("unit_price")%></td>
-							<td><%=rs.getString("stock")%></td>
-							<td><%=rs.getString("safety_stock")%></td>
-							<td style="display:none"><%=rs.getString("standard")%></td>
-							<td style="display:none"><%=rs.getString("unit")%></td>
-							<td style="display:none"><%= rs.getString("part_img")%></td>
-							<td><button type="button" class="btn btn-secondary" onclick="location.href='/MES/barcode/barcode.jsp?code=23&uniqueId=<%=rs.getString("b_num")%>'">인쇄</button></td>
+							<td><%=db.rs.getString("part_type")%></td>
+							<td style="display:none"><%=db.rs.getString("core")%></td>
+							<td><%=db.rs.getString("part_name")%></td>
+							<td><%=db.rs.getString("unit_price")%></td>
+							<td><%=db.rs.getString("stock")%></td>
+							<td><%=db.rs.getString("safety_stock")%></td>
+							<td style="display:none"><%=db.rs.getString("standard")%></td>
+							<td style="display:none"><%=db.rs.getString("unit")%></td>
+							<td style="display:none"><%= db.rs.getString("part_img")%></td>
+							<td><button type="button" class="btn btn-secondary" onclick="location.href='/MES/barcode/barcode.jsp?code=23&uniqueId=<%=db.rs.getString("b_num")%>'">인쇄</button></td>
 						</tr>
 						
 						<%
@@ -438,9 +424,9 @@ rs=stmt.executeQuery(query);
 	</div>
 	
 	<%
-	rs.close();
-	stmt.close();
-	conn.close();
+	db.rs.close();
+	db.stmt.close();
+	db.conn.close();
 	%>
 </body>
 </html>

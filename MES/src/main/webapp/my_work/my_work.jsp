@@ -2,79 +2,64 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 <%
-query = "select count(*) from mes.order";
-rs=stmt.executeQuery(query);
-rs.next();
-int countorder = rs.getInt(1);
+String query = "select count(*) from mes.order";
+db.rs=db.stmt.executeQuery(query);
+db.rs.next();
+int countorder = db.rs.getInt(1);
 String[] ordername = new String[countorder];
 
 query = "select * from mes.order";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 int i=0;
-while(rs.next()){
-	ordername[i] = rs.getString("item_no");
+while(db.rs.next()){
+	ordername[i] = db.rs.getString("item_no");
 	i++;
 }
 
 query = "select count(*) from mes.process";
-rs=stmt.executeQuery(query);
-rs.next();
-int countprocess = rs.getInt(1);
+db.rs=db.stmt.executeQuery(query);
+db.rs.next();
+int countprocess = db.rs.getInt(1);
 String[] processname = new String[countprocess];
 
 query = "select * from mes.process";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 i=0;
-while(rs.next()){
-	processname[i] = rs.getString("process_name");
+while(db.rs.next()){
+	processname[i] = db.rs.getString("process_name");
 	i++;
 }
 
 query = "select count(*) from part";
-rs=stmt.executeQuery(query);
-rs.next();
-int countpart = rs.getInt(1);
+db.rs=db.stmt.executeQuery(query);
+db.rs.next();
+int countpart = db.rs.getInt(1);
 String[] partname = new String[countpart];
 query = "select * from part";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 i=0;
-while(rs.next()){
-	partname[i] = rs.getString("part_name");
+while(db.rs.next()){
+	partname[i] = db.rs.getString("part_name");
 	i++;
 }
 
 query = "select count(*) from facilities";
-rs=stmt.executeQuery(query);
-rs.next();
-int countfacilities = rs.getInt(1);
+db.rs=db.stmt.executeQuery(query);
+db.rs.next();
+int countfacilities = db.rs.getInt(1);
 String[] facilitiesname = new String[countfacilities];
 
 query = "select * from facilities";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 i=0;
-while(rs.next()){
-	facilitiesname[i] = rs.getString("facilities_name");
+while(db.rs.next()){
+	facilitiesname[i] = db.rs.getString("facilities_name");
 	i++;
 }
 
@@ -127,10 +112,10 @@ var i=0;
 
 <%
 query = "select * from mes.order";
-rs=stmt.executeQuery(query);
-while(rs.next()){
+db.rs=db.stmt.executeQuery(query);
+while(db.rs.next()){
 %>
-ordertocom.set('<%=rs.getString("item_no")%>','<%=rs.getString("order_com_id")%>');
+ordertocom.set('<%=db.rs.getString("item_no")%>','<%=db.rs.getString("order_com_id")%>');
 <%
 }
 for(i=0;i<ordername.length;i++){
@@ -163,7 +148,7 @@ facilitiesname[i] = "<%=facilitiesname[i]%>";
 i++;
 <%}
 query = "select * from my_work";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 %>
 </script>
 
@@ -176,10 +161,10 @@ rs=stmt.executeQuery(query);
 		<div class="form-inline" class="row">
 			<div class="col-12" id="maindiv">
 				<%
-				while(rs.next()){
-					datalastdivnum = rs.getInt("work_id");
-					String workstart = rs.getString("work_start");
-					String workend = rs.getString("work_end");
+				while(db.rs.next()){
+					datalastdivnum = db.rs.getInt("work_id");
+					String workstart = db.rs.getString("work_start");
+					String workend = db.rs.getString("work_end");
 					if(workstart != null){
 						workstart = workstart.substring(0,16);
 						workstart = workstart.replace(" ","T");
@@ -189,18 +174,18 @@ rs=stmt.executeQuery(query);
 						workend = workend.replace(" ","T");
 					}
 					String tempstring="";
-					if(rs.getString("status")==null){
+					if(db.rs.getString("status")==null){
 						tempstring="";
 					}
 					else{
-						tempstring=rs.getString("status");
+						tempstring=db.rs.getString("status");
 					}
 					String tempfaulty="";
-					if(rs.getString("faulty")==null){
+					if(db.rs.getString("faulty")==null){
 						tempfaulty="";
 					}
 					else{
-						tempfaulty = rs.getString("faulty");
+						tempfaulty = db.rs.getString("faulty");
 					}
 				%>
 				<div id='<%=datalastdivnum%>' style="<%=tempstring.equals("완료")?"display:none":""%>">
@@ -226,16 +211,16 @@ rs=stmt.executeQuery(query);
 								<tr>
 									<td>
 									
-										<input type="text" class = "form-control" value="<%=rs.getString("order_name")%>" name="order_name" disabled>
+										<input type="text" class = "form-control" value="<%=db.rs.getString("order_name")%>" name="order_name" disabled>
 									</td>
 									<td>
-										<input type="text" class = "form-control" value="<%=rs.getString("part_name") %>" name="part_name" disabled>
+										<input type="text" class = "form-control" value="<%=db.rs.getString("part_name") %>" name="part_name" disabled>
 									</td>
 									<td>
-										<input type="text" class = "form-control" value="<%=rs.getString("process") %>" name="process" readonly>
+										<input type="text" class = "form-control" value="<%=db.rs.getString("process") %>" name="process" readonly>
 									</td>
 									<td>
-										<input type="text" class = "form-control" value="<%=rs.getString("facilities") %>" name="facilities" disabled>
+										<input type="text" class = "form-control" value="<%=db.rs.getString("facilities") %>" name="facilities" disabled>
 									</td>
 									<td>
 										<input type="datetime-local" class="form-control" value="<%=workstart%>" name="work_start">
@@ -247,7 +232,7 @@ rs=stmt.executeQuery(query);
 										<input type="checkbox" <%=tempfaulty.equals("Y")?"checked":""%> name="faulty">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("status")%>" name="status">
+										<input type="text" class="form-control" value="<%=db.rs.getString("status")%>" name="status">
 									</td>
 									<td style="width:5%">
 										<button class="btn btn-danger" type="submit" formaction="delete.jsp" formmethod="post">삭제</button>
@@ -277,34 +262,34 @@ rs=stmt.executeQuery(query);
 							<tbody>
 								<tr>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("client")%>" readonly name="client">
+										<input type="text" class="form-control" value="<%=db.rs.getString("client")%>" readonly name="client">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("dobun")%>" readonly name="dobun">
+										<input type="text" class="form-control" value="<%=db.rs.getString("dobun")%>" readonly name="dobun">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getInt("quantity")%>" readonly name="quantity">
+										<input type="text" class="form-control" value="<%=db.rs.getInt("quantity")%>" readonly name="quantity">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("core")%>" readonly name="core">
+										<input type="text" class="form-control" value="<%=db.rs.getString("core")%>" readonly name="core">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("work_time")%>" readonly name="work_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("work_time")%>" readonly name="work_time">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("real_processing_time")%>" name="real_processing_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("real_processing_time")%>" name="real_processing_time">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("no_men_processing_time")%>" name="no_men_processing_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("no_men_processing_time")%>" name="no_men_processing_time">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("un_processing_time")%>" name="un_processing_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("un_processing_time")%>" name="un_processing_time">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("total_work_time")%>" readonly name="total_work_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("total_work_time")%>" readonly name="total_work_time">
 									</td>
 									<td>
-										<input type="text" class="form-control" value="<%=rs.getString("total_processing_time")%>" readonly name="total_processing_time">
+										<input type="text" class="form-control" value="<%=db.rs.getString("total_processing_time")%>" readonly name="total_processing_time">
 									</td>
 								</tr>
 							</tbody>
@@ -341,17 +326,7 @@ rs=stmt.executeQuery(query);
 					}
 					
 					
-					/*
-					var sel2 = tr1.children[2].children[0];
 					
-					for(i=0;i<processname.length;i++){
-						var option = document.createElement("option");
-						option.text = processname[i];
-						option.value = processname[i];
-						sel2.appendChild(option);
-					}
-					
-					*/
 					
 					
 				}
@@ -526,9 +501,9 @@ rs=stmt.executeQuery(query);
 	</form>
 </div>
 <%
-rs.close();
-stmt.close();
-conn.close();
+db.rs.close();
+db.stmt.close();
+db.conn.close();
 %>
 </body>
 </html>

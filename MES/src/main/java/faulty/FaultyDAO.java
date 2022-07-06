@@ -140,7 +140,7 @@ public class FaultyDAO {
 				stmt = con.createStatement();
 				
 				result = stmt.executeUpdate(sql);
-				
+			
 				sql = "{CALL decid("+ bn + ", \'mes.faulty\', \'faulty_no\') }";
 				cstmt = con.prepareCall(sql);
 				cstmt.execute();

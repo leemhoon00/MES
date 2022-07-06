@@ -2,26 +2,12 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
 	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
-	
+	jhdbconn db = new jhdbconn();
+	String query;
 %>
 <%
 String worker = request.getParameter("select");
@@ -42,7 +28,7 @@ else{
 	query = "select * from my_work where status='완료' AND worker='"+worker+"' AND regdate between '"+date1+"' and '"+date2+"' order by order_name";
 }
 
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 %>
 
 <!DOCTYPE html>
@@ -68,21 +54,21 @@ rs=stmt.executeQuery(query);
         		int total=0;
         		String order_name="";
         		String order_name2="";
-        		while(rs.next()){
-        			order_name2=rs.getString("order_name");
+        		while(db.rs.next()){
+        			order_name2=db.rs.getString("order_name");
         			if(order_name2.equals(order_name)){
         				order_name2="";
         			}
         			else{
         				order_name=order_name2;
         			}
-        			total += rs.getInt("work_time");
+        			total += db.rs.getInt("work_time");
         		%>
         		<tr>
         			<td style="text-align: center"><%=order_name2%></td>
-        			<td style="text-align: center"><%=rs.getString("process")%></td>
-        			<td style="text-align: center"><%=rs.getString("facilities")%></td>
-        			<td style="text-align: center"><%=rs.getInt("work_time")%></td>
+        			<td style="text-align: center"><%=db.rs.getString("process")%></td>
+        			<td style="text-align: center"><%=db.rs.getString("facilities")%></td>
+        			<td style="text-align: center"><%=db.rs.getInt("work_time")%></td>
         		</tr>
         		<% } %>
         	</tbody>
@@ -95,5 +81,10 @@ rs=stmt.executeQuery(query);
         </table>
     </div>
 </div>
+<%
+db.rs.close();
+db.stmt.close();
+db.conn.close();
+%>
 </body>
 </html>

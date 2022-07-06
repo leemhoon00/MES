@@ -49,6 +49,7 @@
 		$("#insertpcpanel").hide();
         $("#insertpceqpanel").hide();
 		
+        $("#dnprocess_name").val($(this).children("#spnames").text());
 		$("#selpcpnameinput").val($(this).children("#spnames").text());
 		$("#selpcfreratesinput").val($(this).children("#sppay").text());
 		$("#selpcloadfacinput").val($(this).children("#sploadfac").text());

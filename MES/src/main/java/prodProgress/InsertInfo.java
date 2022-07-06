@@ -159,6 +159,7 @@ public class InsertInfo extends HttpServlet {
          
       case "OrderRequest":
     	  OrderRequestDTO dto = new OrderRequestDTO(dao.getPorder_numNext());
+    	  
     	  result = new JSONObject();
     	  
     	  dto.setOrder_name(request.getParameter("itemno"));

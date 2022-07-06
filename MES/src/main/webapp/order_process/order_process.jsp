@@ -2,26 +2,13 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
+<%@ page import="jh.jhdbconn"%>
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
+
 
 
 <!DOCTYPE html>
@@ -50,8 +37,8 @@
 </head>
 <body>
 <%
-query="select * from mes.order";
-rs=stmt.executeQuery(query);
+String query="select * from mes.order";
+db.rs=db.stmt.executeQuery(query);
 %>
 	<label class="title" style="margin-left: 30px; margin-top: 10px;">생산 관리 / 수주 공정 관리</label>
 	
@@ -61,9 +48,9 @@ rs=stmt.executeQuery(query);
 				<label>수주명:</label>
 				<select class="form-select search" style="width:15%" id="select" onchange="selectchange(this)">
 				<%
-				while(rs.next()){
+				while(db.rs.next()){
 				%>
-					<option value="<%=rs.getString("item_no")%>"><%=rs.getString("item_no")%></option>
+					<option value="<%=db.rs.getString("item_no")%>"><%=db.rs.getString("item_no")%></option>
 				<%} %>
 				</select>
 			</div>
@@ -111,9 +98,9 @@ rs=stmt.executeQuery(query);
 	</script>
 	
 	<%
-	rs.close();
-	stmt.close();
-	conn.close();
+	db.rs.close();
+	db.stmt.close();
+	db.conn.close();
 	%>
 </body>
 </html>

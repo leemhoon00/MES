@@ -2,33 +2,19 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
 	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
-	
+	jhdbconn db = new jhdbconn();
+	String query;
 	
 	String year = request.getParameter("year");
 	String month = request.getParameter("month");
 	
 	
 	query = "SELECT * FROM mes.order WHERE MONTH(order_date) = "+month+" AND YEAR(order_date) = "+year;
-	rs=stmt.executeQuery(query);
+	db.rs=db.stmt.executeQuery(query);
 	
 %>
 <!DOCTYPE html>
@@ -67,21 +53,21 @@
 		</thead>
 		<tbody>
 		<%
-		while(rs.next()){
+		while(db.rs.next()){
 		%>
 			<tr>
-				<td><%=rs.getInt("order_num") %></td>
-				<td><%=rs.getString("item_no") %></td>
-				<td><%=rs.getString("order_com_id") %></td>
+				<td><%=db.rs.getInt("order_num") %></td>
+				<td><%=db.rs.getString("item_no") %></td>
+				<td><%=db.rs.getString("order_com_id") %></td>
 				<td>0.0</td>
 				<td>0.0</td>
 				<td>0 %</td>
 			</tr>
 		<%} 
 		
-		rs.close();
-		stmt.close();
-		conn.close();
+		db.rs.close();
+		db.stmt.close();
+		db.conn.close();
 		%>
 		</tbody>
 	</table>

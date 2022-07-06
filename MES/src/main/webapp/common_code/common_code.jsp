@@ -1,26 +1,13 @@
 <!-- 공통 코드 관리 페이지 -->
 
-<%@ page language="java" contentType="text/html; charset=utf-8"
+<%@ page import="jh.jhdbconn"%>
+<%@ page language="java" contentType="text/html; chadb.rset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
+
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 
 <!DOCTYPE html>
@@ -29,13 +16,13 @@
 <meta charset="utf-8">
 
 <script type="text/javascript"
-	src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+	src="https://cdn.jsdelivr.net/jdb.query/latest/jdb.query.min.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
 	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 	crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" 
+<script src="https://code.jdb.query.com/jdb.query-3.6.0.min.js" 
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -53,12 +40,12 @@ var subclass = [];
 int subcount=0;
 int maincount=0;
 
-rs=stmt.executeQuery("select count(*) from code_sub");
-if(rs.next()){subcount=rs.getInt(1);}
+db.rs=db.stmt.executeQuery("select count(*) from code_sub");
+if(db.rs.next()){subcount=db.rs.getInt(1);}
 
-rs=stmt.executeQuery("select count(*) from code_main");
-if(rs.next()){maincount=rs.getInt(1);}
-rs=stmt.executeQuery("select * from code_sub");
+db.rs=db.stmt.executeQuery("select count(*) from code_main");
+if(db.rs.next()){maincount=db.rs.getInt(1);}
+db.rs=db.stmt.executeQuery("select * from code_sub");
 %>
 
 var subcount = <%=subcount%>;
@@ -73,16 +60,16 @@ var maintogroupmap = new Map();
 
 <%
 
-while(rs.next()){
+while(db.rs.next()){
 %>
-subclass.push({main_code: '<%=rs.getString("main_code").replace(" ","_")%>', sub_code: '<%=rs.getString("sub_code").replace(" ","_")%>', using: '<%=rs.getInt("using")%>'});
-subtomainmap.set('<%=rs.getString("sub_code")%>','<%=rs.getString("main_code").replace(" ","_")%>');
+subclass.push({main_code: '<%=db.rs.getString("main_code").replace(" ","_")%>', sub_code: '<%=db.rs.getString("sub_code").replace(" ","_")%>', using: '<%=db.rs.getInt("using")%>'});
+subtomainmap.set('<%=db.rs.getString("sub_code")%>','<%=db.rs.getString("main_code").replace(" ","_")%>');
 <% } 
-rs = stmt.executeQuery("select * from code_main");
-while(rs.next()){
+db.rs = db.stmt.executeQuery("select * from code_main");
+while(db.rs.next()){
 %>
-mainclass.push({group_code:'<%=rs.getString("group_code")%>', main_code: '<%=rs.getString("main_code").replace(" ","_")%>', using: '<%=rs.getInt("using")%>', contents: '<%=rs.getString("contents").replaceAll("(\r\n|\r|\n|\n\r)", "^&^&")%>'});
-maintogroupmap.set('<%=rs.getString("main_code").replace(" ","_")%>','<%=rs.getString("group_code")%>');
+mainclass.push({group_code:'<%=db.rs.getString("group_code")%>', main_code: '<%=db.rs.getString("main_code").replace(" ","_")%>', using: '<%=db.rs.getInt("using")%>', contents: '<%=db.rs.getString("contents").replaceAll("(\r\n|\r|\n|\n\r)", "^&^&")%>'});
+maintogroupmap.set('<%=db.rs.getString("main_code").replace(" ","_")%>','<%=db.rs.getString("group_code")%>');
 <% } %>
 
 var selectedgroup = "전체";
@@ -99,10 +86,10 @@ var selectedmain = "선택";
 			<select class="form-select search" id="groupselect" onchange="groupchange()">
 				<option value="전체">전체</option>
 				<%
-				rs=stmt.executeQuery("select * from code_group");
-				while(rs.next()){
+				db.rs=db.stmt.executeQuery("select * from code_group");
+				while(db.rs.next()){
 				%>
-				<option value="<%=rs.getString("group_code")%>"><%=rs.getString("group_code")%></option>
+				<option value="<%=db.rs.getString("group_code")%>"><%=db.rs.getString("group_code")%></option>
 				<%} %>
 				
 				<script>
@@ -139,10 +126,10 @@ var selectedmain = "선택";
 			<select class="form-select search" id="mainselect" onchange="mainchange()">
 				<option value="선택">선택</option>
 				<%
-				rs=stmt.executeQuery("select * from code_main");
-				while(rs.next()){
+				db.rs=db.stmt.executeQuery("select * from code_main");
+				while(db.rs.next()){
 				%>
-				<option class="Allmain <%=rs.getString("group_code") %>" value="<%=rs.getString("main_code").replace(" ","_")%>"><%=rs.getString("main_code")%></option>
+				<option class="Allmain <%=db.rs.getString("group_code") %>" value="<%=db.rs.getString("main_code").replace(" ","_")%>"><%=db.rs.getString("main_code")%></option>
 				<% } %>
 				<script>
 				//메인코드 셀렉트박스 change 이벤트
@@ -239,11 +226,11 @@ var selectedmain = "선택";
 									</thead>
 									<tbody style="border-top: none;">
 										<%
-										rs=stmt.executeQuery("select * from code_group");
-										while(rs.next()){
+										db.rs=db.stmt.executeQuery("select * from code_group");
+										while(db.rs.next()){
 										%>
 										<tr class="modalgrouptrs" onclick="changemodalgroup(this)">
-											<td><%=rs.getString("group_code")%></td>
+											<td><%=db.rs.getString("group_code")%></td>
 										</tr>
 										<%} %>
 										<script>
@@ -290,11 +277,11 @@ var selectedmain = "선택";
 									</thead>
 									<tbody style="border-top: none;">
 										<%
-										rs=stmt.executeQuery("select * from code_main");
-										while(rs.next()){
+										db.rs=db.stmt.executeQuery("select * from code_main");
+										while(db.rs.next()){
 										%>
-										<tr class="modalmaintrs <%=rs.getString("group_code")%>" onclick="changemodalmain(this)">
-											<td><%=rs.getString("main_code")%></td>
+										<tr class="modalmaintrs <%=db.rs.getString("group_code")%>" onclick="changemodalmain(this)">
+											<td><%=db.rs.getString("main_code")%></td>
 										</tr>
 										<% } %>
 									</tbody>
@@ -341,11 +328,11 @@ var selectedmain = "선택";
 									</thead>
 									<tbody style="border-top: none;">
 										<%
-										rs=stmt.executeQuery("select * from code_sub");
-										while(rs.next()){
+										db.rs=db.stmt.executeQuery("select * from code_sub");
+										while(db.rs.next()){
 										%>
-										<tr class="modalsubtrs modal<%=rs.getString("main_code").replace(" ","_")%>">
-											<td><%=rs.getString("sub_code")%></td>
+										<tr class="modalsubtrs modal<%=db.rs.getString("main_code").replace(" ","_")%>">
+											<td><%=db.rs.getString("sub_code")%></td>
 										</tr>
 										<%} %>
 									</tbody>
@@ -398,19 +385,19 @@ var selectedmain = "선택";
 					</thead>
 					<tbody style="border-top: none;">
 						<%
-						rs=stmt.executeQuery("select * from code_sub");
+						db.rs=db.stmt.executeQuery("select * from code_sub");
 						String sub_using="";
-						while(rs.next()){
-							if(rs.getInt("using") == 0){
+						while(db.rs.next()){
+							if(db.rs.getInt("using") == 0){
 								sub_using="N";
 							}
 							else{
 								sub_using="Y";
 							}
 						%>
-						<tr class="trs <%=rs.getString("main_code").replace(" ","_")%>" id="<%=rs.getString("sub_code").replace(" ","_")%>" onclick="tableclickevent(this)">
-							<td style="display:none"><%=rs.getString("main_code")%></td>
-							<td><%=rs.getString("sub_code")%></td>
+						<tr class="trs <%=db.rs.getString("main_code").replace(" ","_")%>" id="<%=db.rs.getString("sub_code").replace(" ","_")%>" onclick="tableclickevent(this)">
+							<td style="display:none"><%=db.rs.getString("main_code")%></td>
+							<td><%=db.rs.getString("sub_code")%></td>
 							<td><%=sub_using%></td>
 						</tr>
 						<%
@@ -551,9 +538,9 @@ var selectedmain = "선택";
 	</div>
 </div>
 <%
-rs.close();
-stmt.close();
-conn.close();
+db.rs.close();
+db.stmt.close();
+db.conn.close();
 %>
 </body>
 </html>

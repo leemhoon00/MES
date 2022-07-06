@@ -2,37 +2,23 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Date"%>
 <%@ page import="java.time.LocalDate"%>
+<%@ page import="jh.jhdbconn"%>
 
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Statement stmt = null;
-	ResultSet rs = null;
-	String query= null;
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
+	jhdbconn db = new jhdbconn();
 %>
 <%
 int temp;
 
 //발주 관련 페이지네이션 용
 int orderrowcount=0;
-query="select count(*) from place_order";
-rs=stmt.executeQuery(query);
-if(rs.next()){orderrowcount=rs.getInt(1);}
+db.query="select count(*) from place_order";
+db.rs=db.stmt.executeQuery(db.query);
+if(db.rs.next()){orderrowcount=db.rs.getInt(1);}
 int orderlastpagenumber=1;
 if(orderrowcount != 0){
 	orderlastpagenumber = (orderrowcount-1)/10 +1;
@@ -40,17 +26,17 @@ if(orderrowcount != 0){
 
 //외주 관련 페이지네이션 용
 int outsourcingrowcount=0;
-query="select count(*) from outsourcing";
-rs=stmt.executeQuery(query);
-if(rs.next()){outsourcingrowcount=rs.getInt(1);}
+db.query="select count(*) from outsourcing";
+db.rs=db.stmt.executeQuery(db.query);
+if(db.rs.next()){outsourcingrowcount=db.rs.getInt(1);}
 int outsourcinglastpagenumber=1;
 if(outsourcingrowcount != 0){
 	outsourcinglastpagenumber = (outsourcingrowcount-1)/10 +1;
 }
 %>
 <%
-query = "select * from place_order";
-rs=stmt.executeQuery(query);
+db.query = "select * from place_order";
+db.rs=db.stmt.executeQuery(db.query);
 %>
 <!DOCTYPE html>
 <html>
@@ -556,13 +542,13 @@ rs=stmt.executeQuery(query);
 					int ordercount=0;
 					int orderpagegroup=0;
 					
-					while(rs.next()){
+					while(db.rs.next()){
 						ordercount++;
 						if(ordercount % 10 ==1){
 							orderpagegroup++;
 						}
-						temp = rs.getInt("porder_no");
-						if(rs.getString("receiving_status").equals("N")){
+						temp = db.rs.getInt("porder_no");
+						if(db.rs.getString("receiving_status").equals("N")){
 							complete = "";
 						}
 						else{
@@ -572,17 +558,17 @@ rs=stmt.executeQuery(query);
 					%>
 					
 					<tr class="ordertrs<%=complete%> orderpagegroup<%=orderpagegroup%>" id="order<%=temp%>" onclick="orderclickevent(this)">
-						<td style="display:none"><%=rs.getString("porder_no")%></td>
-						<td><%=rs.getString("part_name")%></td>
-						<td><%=rs.getString("type")%></td>
-						<td><%=rs.getInt("number_of_request")%></td>
-						<td><%=rs.getString("porder_company")%></td>
-						<td><%=rs.getString("p_date")%></td>
-						<td><%=rs.getString("receiving_day")%></td>
-						<td><%=rs.getString("receiving_status")%></td>
-						<td style="display:none"><%=rs.getString("place_of_delivery")%></td>
-						<td style="display:none"><%=rs.getInt("unit_price")%></td>
-						<td style="display:none"><%=rs.getString("note")%></td>
+						<td style="display:none"><%=db.rs.getString("porder_no")%></td>
+						<td><%=db.rs.getString("part_name")%></td>
+						<td><%=db.rs.getString("type")%></td>
+						<td><%=db.rs.getInt("number_of_request")%></td>
+						<td><%=db.rs.getString("porder_company")%></td>
+						<td><%=db.rs.getString("p_date")%></td>
+						<td><%=db.rs.getString("receiving_day")%></td>
+						<td><%=db.rs.getString("receiving_status")%></td>
+						<td style="display:none"><%=db.rs.getString("place_of_delivery")%></td>
+						<td style="display:none"><%=db.rs.getInt("unit_price")%></td>
+						<td style="display:none"><%=db.rs.getString("note")%></td>
 					</tr>
 					<%
 					}
@@ -711,21 +697,21 @@ rs=stmt.executeQuery(query);
 					<%
 					int outsourcingcount=0;
 					int outsourcingpagegroup=0;
-					query = "select * from outsourcing";
-					rs=stmt.executeQuery(query);
+					db.query = "select * from outsourcing";
+					db.rs=db.stmt.executeQuery(db.query);
 					
 					Date day;
 					Date today = java.sql.Date.valueOf(LocalDate.now());
-					while(rs.next()){
+					while(db.rs.next()){
 						outsourcingcount++;
-						day = rs.getDate("warehousing_exp_date");
+						day = db.rs.getDate("warehousing_exp_date");
 						
 						if(outsourcingcount % 10 ==1){
 							outsourcingpagegroup++;
 						}
-						temp = rs.getInt("outsourcing_no");
+						temp = db.rs.getInt("outsourcing_no");
 						
-						if(rs.getString("outend_date") != null || rs.getString("warehousing_date") != null){
+						if(db.rs.getString("outend_date") != null || db.rs.getString("warehousing_date") != null){
 							complete=" complete";
 						}
 						else if(day == null || today.equals(day) || today.after(day)){
@@ -736,17 +722,17 @@ rs=stmt.executeQuery(query);
 						}
 					%>
 					<tr class="outsourcingtrs<%=complete%> outsourcingpagegroup<%=outsourcingpagegroup%>" id="outsourcing<%=temp%>" onclick="outsourcingclickevent(this)">
-						<td style="display:none"><%=rs.getInt("outsourcing_no")%></td>
-						<td><%=rs.getString("orders_name")%></td>
-						<td><%=rs.getString("prod_name")%></td>
-						<td><%=rs.getString("process")%></td>
-						<td><%=rs.getString("type")%></td>
-						<td><%=rs.getString("company")%></td>
-						<td><%=rs.getInt("price")%></td>
-						<td><%=rs.getString("warehousing_exp_date")%></td>
-						<td><%=rs.getString("outstart_date")%></td>
-						<td><%=rs.getString("warehousing_date")%></td>
-						<td><%=rs.getString("faulty")%></td>
+						<td style="display:none"><%=db.rs.getInt("outsourcing_no")%></td>
+						<td><%=db.rs.getString("orders_name")%></td>
+						<td><%=db.rs.getString("prod_name")%></td>
+						<td><%=db.rs.getString("process")%></td>
+						<td><%=db.rs.getString("type")%></td>
+						<td><%=db.rs.getString("company")%></td>
+						<td><%=db.rs.getInt("price")%></td>
+						<td><%=db.rs.getString("warehousing_exp_date")%></td>
+						<td><%=db.rs.getString("outstart_date")%></td>
+						<td><%=db.rs.getString("warehousing_date")%></td>
+						<td><%=db.rs.getString("faulty")%></td>
 					</tr>
 					<%
 					}
@@ -841,9 +827,9 @@ rs=stmt.executeQuery(query);
 	</div>
 	
 	<%
-	rs.close();
-	stmt.close();
-	conn.close();
+	db.rs.close();
+	db.stmt.close();
+	db.conn.close();
 	%>
 </body>
 </html>

@@ -2,34 +2,18 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
-
+<%@ page import="jh.jhdbconn"%>
 <%
 // 	데이터베이스 연결
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = null;
-	Connection conn2 = null;
-	Statement stmt = null;
-	Statement stmt2 = null;
-	ResultSet rs = null;
-	ResultSet rs2 = null;
+	
 	String query= null;
 	String query2=null;
 	
+	jhdbconn db = new jhdbconn();
+	jhdbconn db2 = new jhdbconn();
 	
-	
-	String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String dbUser = "Usera";
-	String dbPass = "1234";
-	conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	conn2 = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-	stmt = conn.createStatement();
-	stmt2 = conn2.createStatement();
 %>
+
 
 
 <!DOCTYPE html>
@@ -61,20 +45,20 @@
 String ordername = request.getParameter("order");
 
 query="select count(*) from process";
-rs=stmt.executeQuery(query);
-rs.next();
-int processcount = rs.getInt(1);
+db.rs=db.stmt.executeQuery(query);
+db.rs.next();
+int processcount = db.rs.getInt(1);
 String [] process = new String[processcount];
 query="select * from process";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 int j=0;
-while(rs.next()){
-	process[j] = rs.getString("process_name");
+while(db.rs.next()){
+	process[j] = db.rs.getString("process_name");
 	j++;
 }
 
 query="select * from process";
-rs=stmt.executeQuery(query);
+db.rs=db.stmt.executeQuery(query);
 %>
 
 <script>
@@ -86,43 +70,43 @@ var ordername = '<%=ordername%>';
 				<th>PARTLIST</th>
 				<th>수량</th>
 				<%
-				while(rs.next()){
+				while(db.rs.next()){
 				%>
 				<th>
-				<%=rs.getString("process_name")%>
-				<input type="checkbox" value="<%=rs.getString("process_name")%>" onclick="processchecked(this)">
+				<%=db.rs.getString("process_name")%>
+				<input type="checkbox" value="<%=db.rs.getString("process_name")%>" onclick="processchecked(this)">
 				</th>
 				<%} %>
 			</tr>
 		</thead>
 		<%
 		query = "select * from parts_by_order where parts_by_order.order='"+ordername+"'";
-		rs=stmt.executeQuery(query);
+		db.rs=db.stmt.executeQuery(query);
 		
 		query2="select * from process";
-		rs2=stmt2.executeQuery(query2);
+		db2.rs=db2.stmt.executeQuery(query2);
 		%>
 		<tbody>
-		<% while(rs.next()){%>
+		<% while(db.rs.next()){%>
 			<tr>
 				<td>
-					<%=rs.getString("part")%>
-					<input type="checkbox" value="<%=rs.getString("part")%>" onclick="partchecked(this)">
+					<%=db.rs.getString("part")%>
+					<input type="checkbox" value="<%=db.rs.getString("part")%>" onclick="partchecked(this)">
 				</td>
-				<td><%=rs.getInt("quantity") %></td>
+				<td><%=db.rs.getInt("quantity") %></td>
 				<%for(int i=0;i<processcount;i++){ 
 					boolean check;
-					query2="select * from order_process where part_name='"+rs.getString("part")+"' and process_name='"+process[i]+"'";
-					rs2=stmt2.executeQuery(query2);
-					if(rs2.next()){
+					query2="select * from order_process where part_name='"+db.rs.getString("part")+"' and process_name='"+process[i]+"'";
+					db2.rs=db2.stmt.executeQuery(query2);
+					if(db2.rs.next()){
 						check = true;
 					}
 					else{
 						check = false;
 					}
 				%>
-				<td><input class="<%=rs.getString("part")%> <%=process[i]%>" onchange="checkboxchanged(this)" 
-				value="<%=rs.getString("part")%>^<%=process[i]%>" type="checkbox" <%=check? "checked" : "" %>></td>
+				<td><input class="t<%=db.rs.getString("part")%> t<%=process[i]%>" onchange="checkboxchanged(this)" 
+				value="<%=db.rs.getString("part")%>^<%=process[i]%>" type="checkbox" <%=check? "checked" : "" %>></td>
 				<%} %>
 			</tr>
 		<%} %>
@@ -131,7 +115,7 @@ var ordername = '<%=ordername%>';
 	<script>
 	//열 체크 이벤트
 	function processchecked(element){
-		var trs = document.querySelectorAll("."+element.value);
+		var trs = document.querySelectorAll(".t"+element.value);
 		
 		if(element.checked==true){
 			for(var i=0; i<trs.length; i++){
@@ -151,7 +135,7 @@ var ordername = '<%=ordername%>';
 	
 	//행 체크 이벤트
 	function partchecked(element){
-		var trs = document.querySelectorAll("."+element.value);
+		var trs = document.querySelectorAll(".t"+element.value);
 		
 		if(element.checked==true){
 			for(var i=0; i<trs.length; i++){
@@ -182,12 +166,12 @@ var ordername = '<%=ordername%>';
 	</script>
 	
 	<%
-	rs.close();
-	rs2.close();
-	stmt.close();
-	stmt2.close();
-	conn.close();
-	conn2.close();
+	db.rs.close();
+	db2.rs.close();
+	db.stmt.close();
+	db2.stmt.close();
+	db.conn.close();
+	db2.conn.close();
 	%>
 </body>
 </html>

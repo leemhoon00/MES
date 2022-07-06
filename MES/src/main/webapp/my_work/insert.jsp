@@ -2,29 +2,16 @@
 
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="java.sql.DriverManager"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.SQLException"%>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="jh.jhdbconn"%>
 
 <!-- 데이터베이스 연결 -->
 <%
-Class.forName("com.mysql.jdbc.Driver");
-Connection conn = null;
-Statement stmt = null;
-ResultSet rs = null;
-String query= null;
-
-String jdbcDriver = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-String dbUser = "Usera";
-String dbPass = "1234";
-conn = DriverManager.getConnection(jdbcDriver, dbUser, dbPass);
-stmt = conn.createStatement();
+jhdbconn db = new jhdbconn();
+String query;
 %>
 
 
@@ -137,12 +124,12 @@ if(worker==null || worker.equals("")){
 int manufacturing_cost = 0; //ok
 if(status.equals("완료")){
 	query = "select * from process where process_name='"+process+"'";
-	rs=stmt.executeQuery(query);
-	if(rs.next()){
-		int temp = rs.getInt("pay");
+	db.rs=db.stmt.executeQuery(query);
+	if(db.rs.next()){
+		int temp = db.rs.getInt("pay");
 		manufacturing_cost = ((int)work_time+no_men_processing_time)*temp;
 	}
-	rs.close();
+	db.rs.close();
 	
 	
 }
@@ -157,10 +144,10 @@ else{
 
 	
 	
-	stmt.executeUpdate(query);
+	db.stmt.executeUpdate(query);
 	
-	stmt.close();
-	conn.close();
+	db.stmt.close();
+	db.conn.close();
 	
 	response.sendRedirect("my_work.jsp");
 	
