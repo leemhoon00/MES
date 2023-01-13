@@ -19,7 +19,7 @@
 - **IDE** : Eclipse 2021-09
 - **Server** : Apache Tomcat 10.0
 - **Database** : MySQL
-- **Framework** : Vue.js, JQuery
+- **Framework** : JQuery
 - **Design Tool** : BootStrap
 
 ## 주요 기능
